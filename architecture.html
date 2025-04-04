@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>911 System Architecture Explained</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Understanding 911 System Architecture</h1>
+        <p>From traditional landlines to Next Generation 911 (NG911)</p>
+    </header>
+
+    <main>
+        <section id="intro">
+            <h2>Introduction</h2>
+            <p>The 911 emergency telephone system is a critical infrastructure connecting citizens to emergency services. Its architecture has significantly evolved from its initial analog-based design to the modern, IP-based Next Generation 911 (NG911) system, enabling faster, more accurate responses and supporting new forms of communication.</p>
+        </section>
+
+        <section id="traditional-911">
+            <h2>Traditional (Legacy) 911 Architecture</h2>
+            <p>The legacy 911 system primarily relies on the traditional telephone network (PSTN) and focuses on voice calls from landlines and early mobile phones.</p>
+            <div class="diagram-container">
+                <h3>Traditional 911 Call Flow</h3>
+                <div class="mermaid" id="traditional-diagram">
+                    graph LR
+                        subgraph "Caller"
+                            A[Landline Caller]
+                            B[Wireless Caller]
+                        end
+                        subgraph "Telecom Network"
+                            C(Central Office / Switch)
+                            D(Wireless Tower)
+                            E(Selective Router / Tandem)
+                            F[(ALI Database <br> MSAG)]
+                        end
+                        subgraph "PSAP (Public Safety Answering Point)"
+                            G[Call Taker]
+                            H(CAD System)
+                            I[Dispatcher]
+                            J((Emergency Responders))
+                        end
+
+                        A -- ANI --> C -- Trunk --> E
+                        B -- pANI & Location --> D -- Trunk --> E
+                        E -- Routes Call --> G
+                        E -- Queries --> F
+                        F -- Address Info --> G
+                        G -- Enters Info --> H
+                        G -- Relays Info --> I
+                        H -- Incident Details --> I
+                        I -- Dispatches --> J
+
+                        classDef component fill:#f9f,stroke:#333,stroke-width:2px;
+                        classDef database fill:#ccf,stroke:#333,stroke-width:2px;
+                        classDef psap_internal fill:#cfc,stroke:#333,stroke-width:2px;
+                        class A,B,J component;
+                        class C,D,E component;
+                        class F database;
+                        class G,H,I psap_internal;
+                </div>
+                <div id="tooltip" class="tooltip" style="display:none;"></div> %% Tooltip div remains for potential future use
+            </div>
+            <h3>Key Components (Traditional)</h3>
+            <ul>
+                <li><strong>Public Safety Answering Point (PSAP):</strong> Emergency call centers that receive 911 calls and dispatch responders based on jurisdiction.</li>
+                <li><strong>Selective Router:</strong> Telecom-operated switch routing calls to the correct PSAP using Automatic Number Identification (ANI) for landlines or pseudo-ANI (pANI) for wireless, based on geographic tables.</li>
+                <li><strong>ALI Database (Automatic Location Identification):</strong> Stores fixed location data (address) linked to ANIs in the Master Street Address Guide (MSAG). For wireless calls, it holds temporary location info provided by the carrier.</li>
+                <li><strong>Computer-Aided Dispatch (CAD):</strong> System used within the PSAP for logging incidents, managing resources, and coordinating responder dispatch.</li>
+            </ul>
+            <h3>Call Flow (Traditional)</h3>
+            <ul>
+                <li><strong>Landline:</strong> Caller dials 911 -> Call goes to local switch -> ANI sent to Selective Router -> Router identifies correct PSAP -> Call routed to PSAP -> PSAP queries ALI database using ANI to get address.</li>
+                <li><strong>Wireless:</strong> Caller dials 911 -> Call goes to cell tower -> Tower assigns pANI and estimates location (Phase I/II) -> Call routed via network to Selective Router -> Router identifies correct PSAP -> Call routed to PSAP -> PSAP receives pANI and location data (often updated dynamically in ALI).</li>
+            </ul>
+        </section>
+
+        <section id="ng911">
+            <h2>Next Generation 911 (NG911) Architecture</h2>
+            <p>NG911 leverages modern IP-based networks (Internet Protocol) to overcome the limitations of the legacy system. It supports various data types beyond voice, improves location accuracy, and enhances interoperability. One key feature is advanced call conferencing.</p>
+            <p><strong>Learn more about <a href="conferencing.html">NG911 Call Conferencing</a>.</strong></p>
+             <div class="diagram-container">
+                <h3>NG911 Call Flow</h3>
+                <div class="mermaid" id="ng911-diagram">
+graph LR
+    K[IP_Device]
+    L[Text_SMS_Sender]
+    M[IoT_Device]
+    N(NGCS_ECRF_LVF)
+    O[(GIS_Database)]
+    P(BCF_Border_Control)
+    Q(PSAP_Gateway)
+    R[Call_Taker_MM]
+    S(CAD_System_Enhanced)
+    T[Dispatcher]
+    U((Emergency_Responders))
+
+    K -- IP Call / Data --> P
+    L -- SMS/Text --> P
+    M -- Sensor Data --> P
+    P -- Routes to Core --> N
+    N -- Validates Location --> O
+    O -- Location Info --> N
+    N -- Routes Call/Data --> Q
+    Q -- Delivers to PSAP --> R
+    R -- Enters Info --> S
+    R -- Relays Info --> T
+    S -- Incident Details --> T
+    T -- Dispatches --> U
+                </div>
+            </div>
+            <h3>Key Components (NG911)</h3>
+            <ul>
+                <li><strong>ESInet (Emergency Services IP Network):</strong> A secure, managed IP network replacing legacy 911 trunks. It transports voice, data, text, and video.</li>
+                <li><strong>NGCS (Next Generation Core Services):</strong> Functional elements within the ESInet, including:
+                    <ul>
+                        <li><strong>ECRF (Emergency Call Routing Function):</strong> Uses geospatial data (GIS) to determine the appropriate PSAP based on the caller's precise location.</li>
+                        <li><strong>LVF (Location Validation Function):</strong> Validates civic addresses against the GIS database in real-time.</li>
+                    </ul>
+                </li>
+                <li><strong>GIS Database:</strong> Geospatial Information System data replaces the traditional MSAG/ALI. It provides accurate, map-based location information, potentially including vertical location (e.g., floor level).</li>
+                <li><strong>BCF (Border Control Function):</strong> Secure gateway managing traffic entering and leaving the ESInet.</li>
+                <li><strong>PSAP (NG911 Enabled):</strong> PSAPs upgraded with IP-based equipment and software to receive calls and data (including multimedia) from the ESInet.</li>
+            </ul>
+            <h3>Call Flow (NG911)</h3>
+            <ul>
+                <li>Caller initiates request (voice, text, data) via an IP network -> Request enters the ESInet via a Border Control Function -> Next Generation Core Services (ECRF/LVF) validate the precise location using GIS data -> ECRF routes the call/data to the appropriate NG911-enabled PSAP -> PSAP receives the call along with rich data (precise location, potentially multimedia) -> Call taker/Dispatcher handle the incident using enhanced CAD systems.</li>
+            </ul>
+            <h3>Benefits of NG911</h3>
+            <ul>
+                <li><strong>Improved Location Accuracy:</strong> GIS data provides more precise location, including potentially vertical location (z-axis).</li>
+                <li><strong>Multimedia Support:</strong> Ability to send text, images, and video to 911.</li>
+                <li><strong>Enhanced Interoperability:</strong> Easier to transfer calls and data between PSAPs.</li>
+                <li><strong>Increased Resilience:</strong> IP networks offer more redundancy and flexible routing options.</li>
+                <li><strong>Support for Modern Devices:</strong> Natively handles calls from VoIP, mobile apps, IoT devices, etc.</li>
+            </ul>
+        </section>
+
+        <section id="comparison">
+            <h2>Legacy vs. NG911 Comparison</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Legacy 911</th>
+                        <th>NG911</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Network</td>
+                        <td>Analog / PSTN</td>
+                        <td>IP-based (ESInet)</td>
+                    </tr>
+                    <tr>
+                        <td>Data Types</td>
+                        <td>Voice Only</td>
+                        <td>Voice, Text, Video, Data (IoT)</td>
+                    </tr>
+                    <tr>
+                        <td>Location Data</td>
+                        <td>ALI Database (MSAG - Civic Address)</td>
+                        <td>GIS Database (Geospatial Coordinates)</td>
+                    </tr>
+                    <tr>
+                        <td>Location Accuracy</td>
+                        <td>Variable, less precise (especially wireless)</td>
+                        <td>Highly precise, potential for Z-axis</td>
+                    </tr>
+                    <tr>
+                        <td>Routing</td>
+                        <td>Selective Router (ANI/pANI based)</td>
+                        <td>ECRF (GIS location based)</td>
+                    </tr>
+                     <tr>
+                        <td>Interoperability</td>
+                        <td>Limited</td>
+                        <td>Enhanced (IP-based transfers)</td>
+                    </tr>
+                     <tr>
+                        <td>Resilience</td>
+                        <td>Vulnerable to circuit failures</td>
+                        <td>More resilient (IP routing, redundancy)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="conclusion">
+            <h2>Conclusion</h2>
+            <p>The transition from legacy 911 to NG911 represents a fundamental shift towards a more capable, resilient, and accurate emergency communication system. While deployment is ongoing, NG911 promises to significantly improve public safety by leveraging modern technology to connect citizens with help faster and more effectively.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>Diagrams rendered using Mermaid JS.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
