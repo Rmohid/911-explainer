@@ -76,11 +76,21 @@ strong {
     padding: 1em;
     border-radius: 5px;
     border: 1px solid #ccd;
-    overflow-x: auto; /* Allow horizontal scrolling for large diagrams */
+    overflow-x: auto; /* Allow horizontal scrolling */
+    overflow-y: auto; /* Allow vertical scrolling */
+    max-height: 600px; /* Limit height to encourage scrolling for tall diagrams */
+    padding: 1.5em; /* Increase padding */
 }
 
 .mermaid {
     margin: 1em auto; /* Center the diagram */
+}
+
+/* Scale up the rendered SVG slightly */
+.mermaid svg {
+    transform-origin: top left; /* Scale from the top-left corner */
+    transform: scale(1.15); /* Scale factor (adjust as needed) */
+    margin-bottom: 1em; /* Add some space below scaled diagram if needed */
 }
 
 /* Tooltip Styling */
