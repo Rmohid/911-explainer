@@ -86,13 +86,6 @@ strong {
     margin: 1em auto; /* Center the diagram */
 }
 
-/* Scale up the rendered SVG slightly */
-.mermaid svg {
-    transform-origin: top left; /* Scale from the top-left corner */
-    transform: scale(1.15); /* Scale factor (adjust as needed) */
-    margin-bottom: 1em; /* Add some space below scaled diagram if needed */
-}
-
 /* Tooltip Styling */
 .tooltip {
     position: absolute; /* Position relative to diagram-container */
