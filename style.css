@@ -1,0 +1,134 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background-color: #003366; /* Dark blue */
+    color: #fff;
+    padding: 1rem 0;
+    text-align: center;
+    border-bottom: 5px solid #ffcc00; /* Gold accent */
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5em;
+}
+
+header p {
+    margin: 0.5em 0 0;
+    font-style: italic;
+}
+
+main {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+section {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+section:last-child {
+    border-bottom: none;
+}
+
+h2 {
+    color: #003366;
+    border-bottom: 2px solid #ffcc00;
+    padding-bottom: 0.3em;
+    margin-bottom: 1em;
+}
+
+h3 {
+    color: #0055a4; /* Medium blue */
+    margin-top: 1.5em;
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+li {
+    margin-bottom: 0.5em;
+}
+
+strong {
+    font-weight: bold;
+}
+
+.diagram-container {
+    text-align: center;
+    margin: 2em 0;
+    position: relative; /* Needed for tooltip positioning */
+    background-color: #eef;
+    padding: 1em;
+    border-radius: 5px;
+    border: 1px solid #ccd;
+    overflow-x: auto; /* Allow horizontal scrolling for large diagrams */
+}
+
+.mermaid {
+    margin: 1em auto; /* Center the diagram */
+}
+
+/* Tooltip Styling */
+.tooltip {
+    position: absolute; /* Position relative to diagram-container */
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    white-space: nowrap;
+    z-index: 10;
+    pointer-events: none; /* Prevent tooltip from interfering with mouse events */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    transition: opacity 0.2s ease-in-out;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #003366;
+    color: #fff;
+    font-weight: bold;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+    background-color: #eef;
+}
+
+footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding: 1rem;
+    font-size: 0.9em;
+    color: #666;
+    background-color: #eee;
+}
