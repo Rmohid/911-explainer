@@ -27,27 +27,16 @@
                 <div class="mermaid" id="ng911-conferencing-diagram">
 %%{init: {"themeVariables": {"fontSize": "16px"}}}%%
 graph TD
-    subgraph "Originating Call"
-        Caller[Caller via IP Device/Text/etc.]
-    end
-
-    subgraph "ESInet / NGCS"
-        BCF(BCF - Border Control)
-        NGCS(NGCS - Core Services <br> Media Handling, Session Control)
-        GIS[(GIS Database)]
-    end
-
-    subgraph "Primary PSAP"
-        PSAP_CT[PSAP Call Taker]
-        PSAP_CAD(PSAP CAD)
-    end
-
-    subgraph "Conferenced Resources (via ESInet)"
-        Translator[Remote Translator <br> (Video/Text/Voice)]
-        Specialist[Medical Specialist <br> (Telemedicine Consult)]
-        OtherAgency[Another PSAP / Agency]
-        FieldResponder[Field Responder <br> (Sharing Video/Data)]
-    end
+    Caller[Caller via IP Device/Text/etc.]
+    BCF(BCF - Border Control)
+    NGCS(NGCS - Core Services <br> Media Handling, Session Control)
+    GIS[(GIS Database)]
+    PSAP_CT[PSAP Call Taker]
+    PSAP_CAD(PSAP CAD)
+    Translator[Remote Translator <br> (Video/Text/Voice)]
+    Specialist[Medical Specialist <br> (Telemedicine Consult)]
+    OtherAgency[Another PSAP / Agency]
+    FieldResponder[Field Responder <br> (Sharing Video/Data)]
 
     Caller -- Call/Data --> BCF
     BCF --> NGCS
@@ -69,17 +58,8 @@ graph TD
     FieldResponder -- Multimedia Session --> NGCS
 
     NGCS -- Manages Conference Session --> PSAP_CT
-
-    %% Basic Styling (avoiding potential issues)
-    classDef psap fill:#cfc,stroke:#333,stroke-width:2px;
-    classDef ng fill:#ffc,stroke:#333,stroke-width:2px;
-    classDef external fill:#ccf,stroke:#333,stroke-width:2px;
-
-    class PSAP_CT,PSAP_CAD psap;
-    class BCF,NGCS,GIS ng;
-    class Translator,Specialist,OtherAgency,FieldResponder external;
-
                 </div>
+                 %% Subgraphs and styling removed for compatibility
             </div>
 
             <h3>Key Features:</h3>
