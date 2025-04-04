@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NG911 Call Conferencing Explained</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Understanding NG911 Call Conferencing</h1>
+        <p>Enhanced Collaboration in Emergency Response</p>
+    </header>
+
+    <main>
+        <section id="intro">
+            <h2>Introduction to NG911 Conferencing</h2>
+            <p>Next Generation 911 (NG911) moves beyond traditional voice-only calls, leveraging IP-based networks (ESInet) and advanced core services (NGCS) to enable sophisticated collaboration features. One key capability is dynamic call conferencing, allowing Public Safety Answering Points (PSAPs) to seamlessly bring external resources into an emergency call, complete with multimedia sharing.</p>
+        </section>
+
+        <section id="conferencing-capabilities">
+            <h2>Core Conferencing Capabilities</h2>
+            <p>The IP nature of the Emergency Services IP Network (ESInet) and the functionality of Next Generation Core Services (NGCS) are central to NG911 conferencing.</p>
+
+            <div class="diagram-container">
+                <h3>NG911 Conferencing Flow Example</h3>
+                <div class="mermaid" id="ng911-conferencing-diagram">
+graph TD
+    subgraph "Originating Call"
+        Caller[Caller via IP Device/Text/etc.]
+    end
+
+    subgraph "ESInet / NGCS"
+        BCF(BCF - Border Control)
+        NGCS(NGCS - Core Services <br> Media Handling, Session Control)
+        GIS[(GIS Database)]
+    end
+
+    subgraph "Primary PSAP"
+        PSAP_CT[PSAP Call Taker]
+        PSAP_CAD(PSAP CAD)
+    end
+
+    subgraph "Conferenced Resources (via ESInet)"
+        Translator[Remote Translator <br> (Video/Text/Voice)]
+        Specialist[Medical Specialist <br> (Telemedicine Consult)]
+        OtherAgency[Another PSAP / Agency]
+        FieldResponder[Field Responder <br> (Sharing Video/Data)]
+    end
+
+    Caller -- Call/Data --> BCF
+    BCF --> NGCS
+    NGCS -- Validates Location --> GIS
+    GIS -- Location Info --> NGCS
+    NGCS -- Routes Call/Data --> PSAP_CT
+    PSAP_CT -- Logs Info --> PSAP_CAD
+
+    PSAP_CT -- Initiates Conference Request --> NGCS
+
+    NGCS -- Invites/Connects --> Translator
+    NGCS -- Invites/Connects --> Specialist
+    NGCS -- Invites/Connects --> OtherAgency
+    NGCS -- Invites/Connects --> FieldResponder
+
+    Translator -- Multimedia Session --> NGCS
+    Specialist -- Multimedia Session --> NGCS
+    OtherAgency -- Multimedia Session --> NGCS
+    FieldResponder -- Multimedia Session --> NGCS
+
+    NGCS -- Manages Conference Session --> PSAP_CT
+
+    %% Basic Styling (avoiding potential issues)
+    classDef psap fill:#cfc,stroke:#333,stroke-width:2px;
+    classDef ng fill:#ffc,stroke:#333,stroke-width:2px;
+    classDef external fill:#ccf,stroke:#333,stroke-width:2px;
+
+    class PSAP_CT,PSAP_CAD psap;
+    class BCF,NGCS,GIS ng;
+    class Translator,Specialist,OtherAgency,FieldResponder external;
+
+                </div>
+                 %% Diagram simplified for compatibility.
+            </div>
+
+            <h3>Key Features:</h3>
+            <ul>
+                <li><strong>Seamless Integration:</strong> PSAPs can conference external resources like translators, medical specialists, mental health professionals, poison control centers, or personnel from other jurisdictions directly into the live 911 call session.</li>
+                <li><strong>Protocol Standardization:</strong> Uses standard IP protocols like SIP (Session Initiation Protocol) and ICE (Interactive Connectivity Establishment) to connect diverse endpoints across different networks, even those behind firewalls.</li>
+                <li><strong>Multimedia Sharing:</strong> NGCS manages the sharing of various media types within the conference. This can include:
+                    <ul>
+                        <li>Real-time video feeds (e.g., from the caller, field responders, or security cameras).</li>
+                        <li>Text messages (SMS or real-time text).</li>
+                        <li>Images and documents.</li>
+                        <li>GIS map data showing incident and resource locations.</li>
+                        <li>Sensor data from IoT devices (e.g., car crash data, medical alerts).</li>
+                    </ul>
+                </li>
+                <li><strong>Role of NGCS:</strong> The Next Generation Core Services act as the central hub, managing media streams (transcoding if necessary), controlling the conference session, authenticating participants, and ensuring secure data transmission.</li>
+                <li><strong>ESInet Backbone:</strong> The Emergency Services IP Network provides the secure, resilient, and high-bandwidth network infrastructure needed to support these complex multimedia conference sessions reliably.</li>
+                <li><strong>Enhanced Situational Awareness:</strong> Conferencing allows relevant parties to share information directly, improving understanding of the situation and enabling more informed decision-making (e.g., a doctor advising paramedics based on live video).</li>
+                <li><strong>Interoperability:</strong> Facilitates seamless call transfers and data sharing between different PSAPs or agencies involved in a large-scale incident.</li>
+            </ul>
+        </section>
+
+        <section id="use-cases">
+            <h2>Example Use Cases</h2>
+            <ul>
+                <li><strong>Language Barriers:</strong> A PSAP call taker conferences in a remote language interpreter via video or voice to communicate effectively with a non-English speaking caller.</li>
+                <li><strong>Medical Emergencies:</strong> A paramedic in the field conferences with an emergency room physician, sharing live patient vitals and video for immediate consultation.</li>
+                <li><strong>Complex Incidents:</strong> During a major fire, the fire department incident commander, police liaison, and PSAP dispatcher are conferenced together, sharing map data and live video feeds from drones or responders.</li>
+                <li><strong>Mental Health Crises:</strong> A call taker conferences in a mental health professional to provide specialized guidance during a crisis call.</li>
+            </ul>
+        </section>
+
+         <section id="conclusion">
+            <h2>Conclusion</h2>
+            <p>NG911 call conferencing represents a significant leap forward from the limitations of traditional 911. By enabling dynamic, multimedia-rich collaboration between PSAPs, field responders, and specialized external resources over the secure ESInet, NG911 enhances situational awareness, improves decision-making, and ultimately leads to faster and more effective emergency response.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>Diagrams rendered using Mermaid JS.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
