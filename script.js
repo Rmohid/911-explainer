@@ -1,100 +1,49 @@
-// Initialize Mermaid JS
-mermaid.initialize({ startOnLoad: true });
+// PlantUML Rendering Logic
 
-// Tooltip element (kept in case needed later)
-// const tooltip = document.getElementById('tooltip');
+// Use a reliable public PlantUML server
+const PLANTUML_SERVER_URL = 'https://www.plantuml.com/plantuml/svg/';
 
-// Function to show tooltip (called by Mermaid 'click' directive)
-// window.callTooltip = function(nodeId, tooltipText) {
-//     // In this setup, we'll use mouseover/mouseout instead of click
-//     // The 'click' directive in Mermaid is just a way to attach the data.
-//     // We'll add the actual event listeners below.
-//     console.warn("callTooltip function is defined but click interaction is replaced by mouseover/mouseout for better UX.");
-// };
-
-// Add mouseover/mouseout listeners to diagram nodes for tooltips
-// --- Tooltip functionality temporarily disabled to ensure diagram rendering ---
-/*
 document.addEventListener('DOMContentLoaded', () => {
-    // Select all diagram containers
-    const diagramContainers = document.querySelectorAll('.diagram-container');
+    // Find all PlantUML script tags
+    const plantUmlScripts = document.querySelectorAll('script[type="text/plantuml"]');
 
-    diagramContainers.forEach(container => {
-        // Use MutationObserver to wait for Mermaid to render the SVG
-        const observer = new MutationObserver((mutationsList, observer) => {
-            for (const mutation of mutationsList) {
-                if (mutation.type === 'childList') {
-                    const svgElement = container.querySelector('svg');
-                    if (svgElement) {
-                        // Once SVG is found, attach listeners to nodes with click handlers
-                        const nodesWithTooltips = svgElement.querySelectorAll('[onclick^="callTooltip"]');
+    plantUmlScripts.forEach(scriptTag => {
+        const plantUmlCode = scriptTag.textContent || scriptTag.innerText;
+        if (!plantUmlCode.trim()) {
+            console.error("Empty PlantUML code found for script:", scriptTag);
+            return;
+        }
 
-                        nodesWithTooltips.forEach(node => {
-                            // Extract tooltip text from the onclick attribute
-                            const onclickAttr = node.getAttribute('onclick');
-                            const match = onclickAttr.match(/callTooltip\(".*?",\s*"(.*?)"\)/);
-                            if (match && match[1]) {
-                                const tooltipText = match[1];
+        // Find the preceding img tag to update its src
+        // Assumes the img tag is immediately before the script tag within the same parent
+        const imgTag = scriptTag.previousElementSibling;
 
-                                node.addEventListener('mouseover', (event) => {
-                                    tooltip.textContent = tooltipText;
-                                    tooltip.style.display = 'block';
-                                    positionTooltip(event, tooltip, container);
-                                });
-
-                                node.addEventListener('mousemove', (event) => {
-                                    positionTooltip(event, tooltip, container);
-                                });
-
-                                node.addEventListener('mouseout', () => {
-                                    tooltip.style.display = 'none';
-                                });
-
-                                // Remove the default Mermaid click behavior if desired
-                                // node.removeAttribute('onclick');
-                                // node.style.cursor = 'pointer'; // Keep pointer cursor
-                            }
-                        });
-                        observer.disconnect(); // Stop observing once done
-                        break; // Exit loop once SVG is found
-                    }
+        if (imgTag && imgTag.tagName === 'IMG') {
+            try {
+                // Encode the PlantUML code
+                const encodedCode = plantumlEncoder.encode(plantUmlCode.trim());
+                // Set the src attribute of the img tag
+                imgTag.src = PLANTUML_SERVER_URL + encodedCode;
+                imgTag.alt = "PlantUML Diagram"; // Update alt text
+            } catch (error) {
+                console.error("Error encoding PlantUML or setting img src:", error);
+                if (imgTag) {
+                    imgTag.alt = "Error loading diagram";
                 }
             }
-        });
-
-        // Start observing the container for changes
-        observer.observe(container, { childList: true, subtree: true });
+        } else {
+            console.error("Could not find preceding img tag for PlantUML script:", scriptTag);
+        }
     });
+
+    // --- Tooltip functionality remains disabled ---
+    // const tooltip = document.getElementById('tooltip');
+    // if (tooltip) {
+    //     // Tooltip logic would need to be adapted if re-enabled,
+    //     // as PlantUML server rendering doesn't support JS interaction easily.
+    //     // Might need image maps or other techniques.
+    // }
 });
 
-// Function to position the tooltip near the mouse cursor within the container bounds
-function positionTooltip(event, tooltipElement, container) {
-    const containerRect = container.getBoundingClientRect();
-    const tooltipRect = tooltipElement.getBoundingClientRect();
-
-    // Calculate position relative to the container
-    let x = event.clientX - containerRect.left + 15; // Offset from cursor
-    let y = event.clientY - containerRect.top + 15;  // Offset from cursor
-
-    // Adjust if tooltip goes out of container bounds (right/bottom)
-    if (x + tooltipRect.width > container.offsetWidth) {
-        x = event.clientX - containerRect.left - tooltipRect.width - 15;
-    }
-    if (y + tooltipRect.height > container.offsetHeight) {
-        y = event.clientY - containerRect.top - tooltipRect.height - 15;
-    }
-
-    // Adjust if tooltip goes out of container bounds (left/top)
-     if (x < 0) {
-        x = event.clientX - containerRect.left + 15; // Reset to right of cursor if it goes left
-    }
-     if (y < 0) {
-        y = event.clientY - containerRect.top + 15; // Reset below cursor if it goes above
-    }
-
-
-    tooltipElement.style.left = `${x}px`;
-    tooltipElement.style.top = `${y}px`;
-}
-*/
-// --- End of disabled tooltip code ---
+// Note: The plantuml-encoder library must be included via CDN in the HTML files
+// e.g., <script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>

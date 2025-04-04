@@ -22,44 +22,53 @@
             <h2>Core Conferencing Capabilities</h2>
             <p>The IP nature of the Emergency Services IP Network (ESInet) and the functionality of Next Generation Core Services (NGCS) are central to NG911 conferencing.</p>
 
-            <div class="diagram-container">
+            <div class="diagram-container plantuml-diagram-container">
                 <h3>NG911 Conferencing Flow Example</h3>
-                <div class="mermaid" id="ng911-conferencing-diagram">
-%%{init: {"themeVariables": {"fontSize": "16px"}}}%%
-graph TD
-    Caller[Caller via IP Device/Text/etc.]
-    BCF(BCF - Border Control)
-    NGCS(NGCS - Core Services <br> Media Handling, Session Control)
-    GIS[(GIS Database)]
-    PSAP_CT[PSAP Call Taker]
-    PSAP_CAD(PSAP CAD)
-    Translator[Remote Translator <br> (Video/Text/Voice)]
-    Specialist[Medical Specialist <br> (Telemedicine Consult)]
-    OtherAgency[Another PSAP / Agency]
-    FieldResponder[Field Responder <br> (Sharing Video/Data)]
+                <img id="ng911-conferencing-diagram-img" alt="NG911 Conferencing Diagram Loading..." />
+                <script type="text/plantuml" style="display: none;">
+@startuml
+' skinparam defaultFontSize 16
 
-    Caller -- Call/Data --> BCF
-    BCF --> NGCS
-    NGCS -- Validates Location --> GIS
-    GIS -- Location Info --> NGCS
-    NGCS -- Routes Call/Data --> PSAP_CT
-    PSAP_CT -- Logs Info --> PSAP_CAD
+rectangle "Caller\n(IP Device/Text/etc.)" as Caller
+node "ESInet / NGCS" as ESINET_NGCS {
+  usecase "BCF - Border Control" as BCF
+  usecase "NGCS - Core Services\nMedia Handling, Session Control" as NGCS
+  database "GIS Database" as GIS
+}
+node "Primary PSAP" as PSAP {
+  rectangle "PSAP Call Taker" as PSAP_CT
+  usecase "PSAP CAD" as PSAP_CAD
+}
+node "Conferenced Resources (via ESInet)" as EXT {
+  rectangle "Remote Translator\n(Video/Text/Voice)" as Translator
+  rectangle "Medical Specialist\n(Telemedicine Consult)" as Specialist
+  rectangle "Another PSAP / Agency" as OtherAgency
+  rectangle "Field Responder\n(Sharing Video/Data)" as FieldResponder
+}
 
-    PSAP_CT -- Initiates Conference Request --> NGCS
+Caller --> BCF : Call/Data
+BCF --> NGCS
+NGCS --> GIS : Validates Location
+GIS --> NGCS : Location Info
+NGCS --> PSAP_CT : Routes Call/Data
+PSAP_CT --> PSAP_CAD : Logs Info
 
-    NGCS -- Invites/Connects --> Translator
-    NGCS -- Invites/Connects --> Specialist
-    NGCS -- Invites/Connects --> OtherAgency
-    NGCS -- Invites/Connects --> FieldResponder
+PSAP_CT --> NGCS : Initiates Conference Request
 
-    Translator -- Multimedia Session --> NGCS
-    Specialist -- Multimedia Session --> NGCS
-    OtherAgency -- Multimedia Session --> NGCS
-    FieldResponder -- Multimedia Session --> NGCS
+NGCS --> Translator : Invites/Connects
+NGCS --> Specialist : Invites/Connects
+NGCS --> OtherAgency : Invites/Connects
+NGCS --> FieldResponder : Invites/Connects
 
-    NGCS -- Manages Conference Session --> PSAP_CT
-                </div>
-                 %% Subgraphs and styling removed for compatibility
+Translator --> NGCS : Multimedia Session
+Specialist --> NGCS : Multimedia Session
+OtherAgency --> NGCS : Multimedia Session
+FieldResponder --> NGCS : Multimedia Session
+
+NGCS --> PSAP_CT : Manages Conference Session
+
+@enduml
+                </script>
             </div>
 
             <h3>Key Features:</h3>
@@ -99,10 +108,10 @@ graph TD
     </main>
 
     <footer>
-        <p>Diagrams rendered using Mermaid JS.</p>
+        <p>Diagrams rendered using PlantUML.</p>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

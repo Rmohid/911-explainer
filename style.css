@@ -82,11 +82,19 @@ strong {
     padding: 1.5em; /* Increase padding */
 }
 
-.mermaid {
-    margin: 1em auto; /* Center the diagram */
+/* Styles for PlantUML diagrams */
+.plantuml-diagram-container img {
+    max-width: 100%; /* Ensure image scales down */
+    height: auto;   /* Maintain aspect ratio */
+    display: block; /* Remove extra space below image */
+    margin: 1em auto; /* Center the image */
+    background-color: #fff; /* Add a background in case of transparency */
+    padding: 10px;
+    border: 1px solid #ccc;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
 }
 
-/* Tooltip Styling */
+/* Tooltip Styling (remains, but JS interaction is disabled) */
 .tooltip {
     position: absolute; /* Position relative to diagram-container */
     background-color: rgba(0, 0, 0, 0.8);
