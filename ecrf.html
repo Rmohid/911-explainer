@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NG911 ECRF (Emergency Call Routing Function)</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+<h1>NG911 ECRF (Emergency Call Routing Function)</h1>
+<p>Geospatial Call Routing in NG911</p>
+</header>
+
+<main>
+<nav>
+<a href="index.html" style="font-weight:bold; font-size:1.2em;">&larr; Back to Home</a>
+</nav>
+
+<section id="intro">
+<h2>What is ECRF?</h2>
+<p>The Emergency Call Routing Function (ECRF) is a core NGCS component that uses geospatial data to determine the correct PSAP for an emergency call based on the caller's precise location. It replaces legacy routing based on phone numbers or cell towers with GIS-based decision-making.</p>
+</section>
+
+<section id="call-flow">
+<h2>ECRF in NG911 Call Flow</h2>
+<div class="diagram-container plantuml-diagram-container">
+<h3>Role of ECRF in Emergency Call Handling</h3>
+<img alt="NG911 ECRF Call Flow Diagram Loading..." />
+<script type="text/plantuml" style="display: none;">
+@startuml
+skinparam defaultFontSize 40
+skinparam scale 0.75
+
+actor Caller
+participant "ESInet / BCF" as BCF
+participant "NGCS (ECRF)" as ECRF
+participant "PSAP" as PSAP
+
+Caller -> BCF : Initiates 911 Call
+BCF -> ECRF : Forwards Call/Data
+ECRF -> ECRF : Query GIS, Determine PSAP
+ECRF -> PSAP : Routes Call/Data
+PSAP -> ECRF : Acknowledge, Manage Session
+PSAP -> Caller : Communicate Emergency
+
+@enduml
+</script>
+</div>
+</section>
+
+<section id="features">
+<h2>Key Features of ECRF</h2>
+<ul>
+<li><strong>GIS-Based Routing:</strong> Uses caller's coordinates to select PSAP.</li>
+<li><strong>Dynamic Updates:</strong> Reflects jurisdictional changes in real-time.</li>
+<li><strong>Supports Multiple Data Types:</strong> Voice, text, video, sensor data.</li>
+<li><strong>Policy Integration:</strong> Considers operational rules and failover.</li>
+<li><strong>Interoperability:</strong> Works with LVF, NGCS, and PSAPs.</li>
+</ul>
+</section>
+
+<section id="conclusion">
+<h2>Conclusion</h2>
+<p>ECRF enables precise, location-based call routing in NG911, improving accuracy and response times.</p>
+</section>
+</main>
+
+<footer>
+<p>Diagrams rendered using PlantUML.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

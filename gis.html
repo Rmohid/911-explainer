@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NG911 GIS Database</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+<h1>NG911 GIS Database</h1>
+<p>Geospatial Data Backbone for NG911</p>
+</header>
+
+<main>
+<nav>
+<a href="index.html" style="font-weight:bold; font-size:1.2em;">&larr; Back to Home</a>
+</nav>
+
+<section id="intro">
+<h2>What is the GIS Database?</h2>
+<p>The Geographic Information System (GIS) database in NG911 contains authoritative, real-time geospatial data used for location validation and call routing. It replaces legacy address databases with precise, map-based information, improving accuracy and enabling advanced features.</p>
+</section>
+
+<section id="call-flow">
+<h2>GIS in NG911 Call Flow</h2>
+<div class="diagram-container plantuml-diagram-container">
+<h3>Role of GIS in Emergency Call Handling</h3>
+<img alt="NG911 GIS Call Flow Diagram Loading..." />
+<script type="text/plantuml" style="display: none;">
+@startuml
+skinparam defaultFontSize 40
+skinparam scale 0.75
+
+actor Caller
+participant "ESInet / BCF" as BCF
+participant "NGCS (LVF/ECRF)" as NGCS
+participant "GIS Database" as GIS
+participant "PSAP" as PSAP
+
+Caller -> BCF : Initiates 911 Call
+BCF -> NGCS : Forwards Call/Data
+NGCS -> GIS : Validate & Route using GIS
+GIS --> NGCS : Location Info
+NGCS -> PSAP : Routes Call/Data
+PSAP -> NGCS : Acknowledge, Manage Session
+PSAP -> Caller : Communicate Emergency
+
+@enduml
+</script>
+</div>
+</section>
+
+<section id="features">
+<h2>Key Features of GIS Database</h2>
+<ul>
+<li><strong>Authoritative Data:</strong> Maintained by local jurisdictions.</li>
+<li><strong>Real-Time Updates:</strong> Reflects new addresses, boundaries, and features.</li>
+<li><strong>Supports Location Validation:</strong> Used by LVF to verify caller location.</li>
+<li><strong>Enables Geospatial Routing:</strong> Used by ECRF for PSAP selection.</li>
+<li><strong>Improves Accuracy:</strong> More precise than legacy address tables.</li>
+</ul>
+</section>
+
+<section id="conclusion">
+<h2>Conclusion</h2>
+<p>The GIS database is critical for accurate, location-based call handling in NG911, enabling faster and more effective emergency response.</p>
+</section>
+</main>
+
+<footer>
+<p>Diagrams rendered using PlantUML.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NG911 NGCS (Next Generation Core Services)</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+<h1>NG911 NGCS (Next Generation Core Services)</h1>
+<p>Core Functionalities for Call Routing and Management</p>
+</header>
+
+<main>
+<nav>
+<a href="index.html" style="font-weight:bold; font-size:1.2em;">&larr; Back to Home</a>
+</nav>
+
+<section id="intro">
+<h2>What is NGCS?</h2>
+<p>Next Generation Core Services (NGCS) are the essential software components within the ESInet that enable advanced call routing, location validation, policy enforcement, and conferencing. NGCS ensures calls are delivered accurately and efficiently to the correct PSAP with rich contextual data.</p>
+</section>
+
+<section id="call-flow">
+<h2>NGCS in NG911 Call Flow</h2>
+<div class="diagram-container plantuml-diagram-container">
+<h3>Role of NGCS in Emergency Call Handling</h3>
+<img alt="NG911 NGCS Call Flow Diagram Loading..." />
+<script type="text/plantuml" style="display: none;">
+@startuml
+skinparam defaultFontSize 40
+skinparam scale 0.75
+
+actor Caller
+participant "ESInet / BCF" as BCF
+participant "NGCS" as NGCS
+participant "PSAP" as PSAP
+
+Caller -> BCF : Initiates 911 Call
+BCF -> NGCS : Forwards Call/Data
+NGCS -> NGCS : Validate Location, Policy Routing
+NGCS -> PSAP : Routes to Appropriate PSAP
+PSAP -> NGCS : Acknowledge, Manage Session
+PSAP -> Caller : Communicate Emergency
+
+@enduml
+</script>
+</div>
+</section>
+
+<section id="features">
+<h2>Key Features of NGCS</h2>
+<ul>
+<li><strong>Location Validation:</strong> Ensures caller's location is accurate using LVF and GIS.</li>
+<li><strong>Call Routing:</strong> Uses ECRF and policies to select the correct PSAP.</li>
+<li><strong>Policy Enforcement:</strong> Applies jurisdictional and operational rules.</li>
+<li><strong>Conferencing:</strong> Enables dynamic addition of external resources.</li>
+<li><strong>Interoperability:</strong> Facilitates call transfers and data sharing.</li>
+</ul>
+</section>
+
+<section id="conclusion">
+<h2>Conclusion</h2>
+<p>NGCS is the intelligence layer of NG911, enabling precise, policy-driven, and feature-rich emergency call handling.</p>
+</section>
+</main>
+
+<footer>
+<p>Diagrams rendered using PlantUML.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

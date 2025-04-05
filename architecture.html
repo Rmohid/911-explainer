@@ -13,6 +13,9 @@
     </header>
 
     <main>
+        <nav>
+            <a href="index.html" style="font-weight:bold; font-size:1.2em;">&larr; Back to Home</a>
+        </nav>
         <section id="intro">
             <h2>Introduction</h2>
             <p>The 911 emergency telephone system is a critical infrastructure connecting citizens to emergency services. Its architecture has significantly evolved from its initial analog-based design to the modern, IP-based Next Generation 911 (NG911) system, enabling faster, more accurate responses and supporting new forms of communication.</p>
@@ -26,7 +29,8 @@
                 <img id="traditional-diagram-img" alt="Traditional 911 Diagram Loading..." />
                 <script type="text/plantuml" style="display: none;">
 @startuml
-' skinparam defaultFontSize 16 ' Font size controlled by server, usually default
+skinparam defaultFontSize 40
+skinparam scale 0.75
 
 package "Caller" {
   rectangle "Landline Caller" as A
@@ -71,10 +75,48 @@ I -down-> J : Dispatches
                 <li><strong>Computer-Aided Dispatch (CAD):</strong> System used within the PSAP for logging incidents, managing resources, and coordinating responder dispatch.</li>
             </ul>
             <h3>Call Flow (Traditional)</h3>
-            <ul>
-                <li><strong>Landline:</strong> Caller dials 911 -> Call goes to local switch -> ANI sent to Selective Router -> Router identifies correct PSAP -> Call routed to PSAP -> PSAP queries ALI database using ANI to get address.</li>
-                <li><strong>Wireless:</strong> Caller dials 911 -> Call goes to cell tower -> Tower assigns pANI and estimates location (Phase I/II) -> Call routed via network to Selective Router -> Router identifies correct PSAP -> Call routed to PSAP -> PSAP receives pANI and location data (often updated dynamically in ALI).</li>
-            </ul>
+             <div class="diagram-container plantuml-diagram-container">
+                <h4>Traditional 911 Sequence</h4>
+                <img alt="Traditional 911 Sequence Diagram Loading..." />
+                <script type="text/plantuml" style="display: none;">
+@startuml
+skinparam defaultFontSize 40
+skinparam scale 0.75
+
+actor "Landline Caller" as A
+actor "Wireless Caller" as B
+participant "Central Office / Switch" as C
+participant "Wireless Tower" as D
+participant "Selective Router" as E
+participant "ALI Database" as F
+participant "PSAP Call Taker" as G
+participant "CAD System" as H
+participant "Dispatcher" as I
+participant "Emergency Responders" as J
+
+A -> C : Dial 911 (ANI)
+C -> E : Forward Call
+E -> F : Query Address (ANI)
+F --> E : Address Info
+E -> G : Route Call
+G -> H : Log Incident
+G -> I : Relay Info
+H -> I : Incident Details
+I -> J : Dispatch Units
+
+B -> D : Dial 911 (pANI, Location)
+D -> E : Forward Call
+E -> F : Query Location (pANI)
+F --> E : Location Info
+E -> G : Route Call
+G -> H : Log Incident
+G -> I : Relay Info
+H -> I : Incident Details
+I -> J : Dispatch Units
+
+@enduml
+                </script>
+            </div>
         </section>
 
         <section id="ng911">
@@ -86,7 +128,8 @@ I -down-> J : Dispatches
                 <img id="ng911-diagram-img" alt="NG911 Diagram Loading..." />
                 <script type="text/plantuml" style="display: none;">
 @startuml
-' skinparam defaultFontSize 16
+skinparam defaultFontSize 40
+skinparam scale 0.75
 
 rectangle "IP_Device" as K
 rectangle "Text_SMS_Sender" as L
@@ -130,9 +173,38 @@ T -down-> U : Dispatches
                 <li><strong>PSAP (NG911 Enabled):</strong> PSAPs upgraded with IP-based equipment and software to receive calls and data (including multimedia) from the ESInet.</li>
             </ul>
             <h3>Call Flow (NG911)</h3>
-            <ul>
-                <li>Caller initiates request (voice, text, data) via an IP network -> Request enters the ESInet via a Border Control Function -> Next Generation Core Services (ECRF/LVF) validate the precise location using GIS data -> ECRF routes the call/data to the appropriate NG911-enabled PSAP -> PSAP receives the call along with rich data (precise location, potentially multimedia) -> Call taker/Dispatcher handle the incident using enhanced CAD systems.</li>
-            </ul>
+             <div class="diagram-container plantuml-diagram-container">
+                <h4>NG911 Sequence</h4>
+                <img alt="NG911 Sequence Diagram Loading..." />
+                <script type="text/plantuml" style="display: none;">
+@startuml
+skinparam defaultFontSize 40
+skinparam scale 0.75
+
+actor "Caller (IP/Text/IoT)" as Caller
+participant "BCF (Border Control)" as BCF
+participant "NGCS (ECRF/LVF)" as NGCS
+participant "GIS Database" as GIS
+participant "PSAP Gateway" as Gateway
+participant "PSAP Call Taker" as CallTaker
+participant "CAD System" as CAD
+participant "Dispatcher" as Dispatcher
+participant "Emergency Responders" as Responders
+
+Caller -> BCF : Initiates 911 Call / Data
+BCF -> NGCS : Forward Call/Data
+NGCS -> GIS : Validate Location
+GIS --> NGCS : Location Info
+NGCS -> Gateway : Route Call/Data
+Gateway -> CallTaker : Deliver Call/Data
+CallTaker -> CAD : Log Incident
+CallTaker -> Dispatcher : Relay Info
+CAD -> Dispatcher : Incident Details
+Dispatcher -> Responders : Dispatch Units
+
+@enduml
+                </script>
+            </div>
             <h3>Benefits of NG911</h3>
             <ul>
                 <li><strong>Improved Location Accuracy:</strong> GIS data provides more precise location, including potentially vertical location (z-axis).</li>

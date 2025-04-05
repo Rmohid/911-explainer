@@ -69,26 +69,27 @@ strong {
 }
 
 .diagram-container {
-    text-align: center;
-    margin: 2em 0;
+    text-align: center; /* Restore centering for block content */
+    /* display: inline-block; /* Revert display */
+    margin: 2em auto; /* Keep centering the block */
     position: relative; /* Needed for tooltip positioning */
     background-color: #eef;
-    padding: 1em;
+    padding: 1.5em; /* Restore padding */
     border-radius: 5px;
     border: 1px solid #ccd;
     overflow-x: auto; /* Allow horizontal scrolling */
     overflow-y: auto; /* Allow vertical scrolling */
-    max-height: 600px; /* Limit height to encourage scrolling for tall diagrams */
-    padding: 1.5em; /* Increase padding */
+    /* max-height: 900px; /* Keep removed */
 }
 
 /* Styles for PlantUML diagrams */
 .plantuml-diagram-container img {
-    max-width: 100%; /* Ensure image scales down */
-    height: auto;   /* Maintain aspect ratio */
-    display: block; /* Remove extra space below image */
-    margin: 1em auto; /* Center the image */
-    background-color: #fff; /* Add a background in case of transparency */
+    width: 150%;
+    max-width: none;
+    height: auto;
+    display: block;
+    margin: 1em auto;
+    background-color: #fff;
     padding: 10px;
     border: 1px solid #ccc;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.1);

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NG911 Failover Scenarios</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+<h1>NG911 Failover Scenarios</h1>
+<p>Ensuring Resilient Emergency Communications</p>
+</header>
+
+<main>
+<nav>
+<a href="index.html" style="font-weight:bold; font-size:1.2em;">&larr; Back to Home</a>
+</nav>
+<section id="intro">
+<h2>Introduction to NG911 Failover</h2>
+<p>Next Generation 911 (NG911) systems are designed with high resilience to ensure emergency calls are handled even during network outages, equipment failures, or PSAP unavailability. Failover mechanisms automatically reroute calls and data to backup systems or alternate PSAPs, maintaining service continuity.</p>
+</section>
+
+<section id="failover-types">
+<h2>Types of Failover in NG911</h2>
+<ul>
+<li><strong>PSAP Failover:</strong> If a primary PSAP is unreachable, calls are rerouted to a backup PSAP or neighboring jurisdiction.</li>
+<li><strong>Network Failover:</strong> Redundant network paths (ESInet) ensure calls can traverse alternate routes if a segment fails.</li>
+<li><strong>Service Failover:</strong> Core services like NGCS have redundant instances to maintain call routing, location validation, and conferencing capabilities.</li>
+<li><strong>Media Failover:</strong> Multimedia streams can be redirected or transcoded via alternate media servers.</li>
+</ul>
+</section>
+
+<section id="failover-call-flow">
+<h2>Failover Call Flow Example</h2>
+<div class="diagram-container plantuml-diagram-container">
+<h3>Emergency Call with PSAP Failover</h3>
+<img alt="NG911 Failover Call Flow Diagram Loading..." />
+<script type="text/plantuml" style="display: none;">
+@startuml
+skinparam defaultFontSize 40
+skinparam scale 0.75
+
+actor Caller
+participant "ESInet / BCF" as BCF
+participant "NGCS" as NGCS
+participant "Primary PSAP" as Primary
+participant "Backup PSAP" as Backup
+
+Caller -> BCF : Initiates 911 Call
+BCF -> NGCS : Forwards Call
+NGCS -> Primary : Attempt Call Delivery
+Primary --> NGCS : No Response / Failure
+NGCS -> Backup : Reroute Call
+Backup -> Backup : Call Taker Answers
+Backup -> NGCS : Acknowledge, Log
+NGCS -> Caller : Connects Call to Backup PSAP
+Caller -> Backup : Communicate Emergency
+
+@enduml
+</script>
+</div>
+</section>
+
+<section id="best-practices">
+<h2>Key Features and Best Practices</h2>
+<ul>
+<li><strong>Automatic Rerouting:</strong> Calls are seamlessly redirected without caller intervention.</li>
+<li><strong>Geographically Diverse Backups:</strong> Backup PSAPs are located in different regions to avoid localized disruptions.</li>
+<li><strong>Redundant ESInet Paths:</strong> Multiple network routes reduce single points of failure.</li>
+<li><strong>Continuous Monitoring:</strong> Systems detect failures in real-time and trigger failover.</li>
+<li><strong>Regular Testing:</strong> Failover procedures are tested periodically to ensure reliability.</li>
+<li><strong>Data Synchronization:</strong> CAD and call data are shared across PSAPs to maintain situational awareness.</li>
+</ul>
+</section>
+
+<section id="conclusion">
+<h2>Conclusion</h2>
+<p>NG911 failover capabilities ensure that emergency calls are answered promptly, even during technical failures or disasters. By leveraging redundant infrastructure, intelligent routing, and resilient network design, NG911 maintains critical communication lifelines when they are needed most.</p>
+</section>
+</main>
+
+<footer>
+<p>Diagrams rendered using PlantUML.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

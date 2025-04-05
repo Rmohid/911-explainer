@@ -43,10 +43,8 @@
     <main>
         <section id="topics">
             <h2>Available Topics:</h2>
-            <ul class="gateway-links">
-                <li><a href="architecture.html">911 System Architecture (Traditional vs. NG911)</a></li>
-                <li><a href="conferencing.html">NG911 Call Conferencing</a></li>
-                <!-- Add links to future topics here -->
+            <ul id="child-pages" class="gateway-links">
+                <!-- Links will be populated dynamically -->
             </ul>
         </section>
     </main>
@@ -55,7 +53,31 @@
         <p>Explainers using Mermaid JS for diagrams.</p>
     </footer>
 
-    <!-- No specific JS needed for this gateway page, but keep link if style.css relies on it -->
-    <!-- <script src="script.js"></script> -->
+    <script>
+    const pages = [
+        { file: 'architecture.html', title: '911 System Architecture (Traditional vs. NG911)' },
+        { file: 'conferencing.html', title: 'NG911 Call Conferencing' },
+        { file: 'failover.html', title: 'NG911 Failover Scenarios' },
+        { file: 'esinet.html', title: 'NG911 ESInet' },
+        { file: 'ngcs.html', title: 'NG911 Core Services (NGCS)' },
+        { file: 'ecrf.html', title: 'NG911 Emergency Call Routing Function (ECRF)' },
+        { file: 'lvf.html', title: 'NG911 Location Validation Function (LVF)' },
+        { file: 'gis.html', title: 'NG911 GIS Database' },
+        { file: 'bcf.html', title: 'NG911 Border Control Function (BCF)' },
+        { file: 'psap.html', title: 'NG911 PSAP (Public Safety Answering Point)' }
+    ];
+
+    const list = document.getElementById('child-pages');
+    pages.forEach(page => {
+        if (page.file !== 'index.html') {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = page.file;
+            a.textContent = page.title;
+            li.appendChild(a);
+            list.appendChild(li);
+        }
+    });
+    </script>
 </body>
 </html>

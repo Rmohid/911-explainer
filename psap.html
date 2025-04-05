@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NG911 PSAP (Public Safety Answering Point)</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+<h1>NG911 PSAP (Public Safety Answering Point)</h1>
+<p>Modern Emergency Call Centers in NG911</p>
+</header>
+
+<main>
+<nav>
+<a href="index.html" style="font-weight:bold; font-size:1.2em;">&larr; Back to Home</a>
+</nav>
+
+<section id="intro">
+<h2>What is an NG911 PSAP?</h2>
+<p>A Next Generation 911-enabled PSAP is an emergency call center equipped to receive and process multimedia communications (voice, text, video, data) over IP networks. It integrates with NG911 core services to improve situational awareness and response coordination.</p>
+</section>
+
+<section id="call-flow">
+<h2>PSAP in NG911 Call Flow</h2>
+<div class="diagram-container plantuml-diagram-container">
+<h3>Role of PSAP in Emergency Call Handling</h3>
+<img alt="NG911 PSAP Call Flow Diagram Loading..." />
+<script type="text/plantuml" style="display: none;">
+@startuml
+skinparam defaultFontSize 40
+skinparam scale 0.75
+
+actor Caller
+participant "ESInet / BCF" as BCF
+participant "NGCS" as NGCS
+participant "PSAP" as PSAP
+
+Caller -> BCF : Initiates 911 Call
+BCF -> NGCS : Forwards Call/Data
+NGCS -> PSAP : Routes to Appropriate PSAP
+PSAP -> NGCS : Acknowledge, Manage Session
+PSAP -> Caller : Communicate Emergency
+PSAP -> PSAP : Conferencing, Data Sharing, Dispatch
+
+@enduml
+</script>
+</div>
+</section>
+
+<section id="features">
+<h2>Key Features of NG911 PSAPs</h2>
+<ul>
+<li><strong>Multimedia Support:</strong> Voice, text, images, video, sensor data.</li>
+<li><strong>Advanced CAD Integration:</strong> Enhanced dispatch and resource management.</li>
+<li><strong>Conferencing:</strong> Seamless collaboration with external experts and agencies.</li>
+<li><strong>Interoperability:</strong> Easy call transfers and data sharing across jurisdictions.</li>
+<li><strong>Resilience:</strong> Redundant systems and failover capabilities.</li>
+</ul>
+</section>
+
+<section id="conclusion">
+<h2>Conclusion</h2>
+<p>NG911-enabled PSAPs are the front line of emergency response, leveraging modern technology to improve communication, coordination, and outcomes.</p>
+</section>
+</main>
+
+<footer>
+<p>Diagrams rendered using PlantUML.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

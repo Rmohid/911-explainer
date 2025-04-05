@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NG911 BCF (Border Control Function)</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+<h1>NG911 BCF (Border Control Function)</h1>
+<p>Securing and Managing Network Access in NG911</p>
+</header>
+
+<main>
+<nav>
+<a href="index.html" style="font-weight:bold; font-size:1.2em;">&larr; Back to Home</a>
+</nav>
+
+<section id="intro">
+<h2>What is BCF?</h2>
+<p>The Border Control Function (BCF) is a security gateway that manages and protects traffic entering and leaving the ESInet. It enforces security policies, performs protocol normalization, and ensures only authorized traffic reaches NG911 core services and PSAPs.</p>
+</section>
+
+<section id="call-flow">
+<h2>BCF in NG911 Call Flow</h2>
+<div class="diagram-container plantuml-diagram-container">
+<h3>Role of BCF in Emergency Call Handling</h3>
+<img alt="NG911 BCF Call Flow Diagram Loading..." />
+<script type="text/plantuml" style="display: none;">
+@startuml
+skinparam defaultFontSize 40
+skinparam scale 0.75
+
+actor Caller
+participant "ESInet / BCF" as BCF
+participant "NGCS" as NGCS
+participant "PSAP" as PSAP
+
+Caller -> BCF : Initiates 911 Call (Voice/Text/Data)
+BCF -> NGCS : Forwards Authorized Call/Data
+NGCS -> PSAP : Routes to Appropriate PSAP
+PSAP -> NGCS : Acknowledge, Manage Session
+PSAP -> Caller : Communicate Emergency
+
+@enduml
+</script>
+</div>
+</section>
+
+<section id="features">
+<h2>Key Features of BCF</h2>
+<ul>
+<li><strong>Security Enforcement:</strong> Blocks unauthorized or malicious traffic.</li>
+<li><strong>Protocol Normalization:</strong> Ensures compatibility across networks.</li>
+<li><strong>Traffic Management:</strong> Controls bandwidth and prioritizes emergency data.</li>
+<li><strong>Logging and Monitoring:</strong> Tracks access and detects anomalies.</li>
+<li><strong>Interoperability:</strong> Connects diverse networks securely.</li>
+</ul>
+</section>
+
+<section id="conclusion">
+<h2>Conclusion</h2>
+<p>BCF is essential for securing NG911 communications, enabling safe and reliable emergency call handling across interconnected networks.</p>
+</section>
+</main>
+
+<footer>
+<p>Diagrams rendered using PlantUML.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

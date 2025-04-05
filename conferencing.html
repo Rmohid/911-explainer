@@ -13,6 +13,9 @@
     </header>
 
     <main>
+        <nav>
+            <a href="index.html" style="font-weight:bold; font-size:1.2em;">&larr; Back to Home</a>
+        </nav>
         <section id="intro">
             <h2>Introduction to NG911 Conferencing</h2>
             <p>Next Generation 911 (NG911) moves beyond traditional voice-only calls, leveraging IP-based networks (ESInet) and advanced core services (NGCS) to enable sophisticated collaboration features. One key capability is dynamic call conferencing, allowing Public Safety Answering Points (PSAPs) to seamlessly bring external resources into an emergency call, complete with multimedia sharing.</p>
@@ -27,7 +30,8 @@
                 <img id="ng911-conferencing-diagram-img" alt="NG911 Conferencing Diagram Loading..." />
                 <script type="text/plantuml" style="display: none;">
 @startuml
-skinparam defaultFontSize 20
+skinparam defaultFontSize 40
+skinparam scale 0.75
 
 rectangle "Caller\n(IP Device/Text/etc.)" as Caller
 node "ESInet / NGCS" as ESINET_NGCS {
@@ -73,6 +77,42 @@ NGCS --> PSAP_CT : Manages Conference Session
 
             <h3>Key Features:</h3>
             <ul>
+
+            </ul>
+
+            <section id="call-flow-sequence">
+                <h2>NG911 Call Flow Sequence</h2>
+                <div class="diagram-container plantuml-diagram-container">
+                    <h3>Emergency Call Handling Overview</h3>
+                    <img alt="NG911 Call Flow Diagram Loading..." />
+                    <script type="text/plantuml" style="display: none;">
+@startuml
+skinparam defaultFontSize 40
+skinparam scale 0.75
+
+actor Caller
+participant "ESInet / BCF" as BCF
+participant "NGCS" as NGCS
+participant "Primary PSAP" as PSAP
+participant "External Resources" as EXT
+
+Caller -> BCF : Initiates 911 Call
+BCF -> NGCS : Forwards Call
+NGCS -> NGCS : Validate Location, Policy Routing
+NGCS -> PSAP : Routes Call to PSAP
+PSAP -> PSAP : Call Taker Answers, Logs Info
+PSAP -> NGCS : (Optional) Request Conference
+NGCS -> EXT : Invite External Participants
+EXT -> NGCS : Join Conference
+NGCS -> PSAP : Manage Conference
+PSAP -> Caller : Communicate, Coordinate
+Caller -> PSAP : Provide Info, Media
+PSAP -> NGCS : End Call / Transfer / Archive
+
+@enduml
+                    </script>
+                </div>
+            </section>
                 <li><strong>Seamless Integration:</strong> PSAPs can conference external resources like translators, medical specialists, mental health professionals, poison control centers, or personnel from other jurisdictions directly into the live 911 call session.</li>
                 <li><strong>Protocol Standardization:</strong> Uses standard IP protocols like SIP (Session Initiation Protocol) and ICE (Interactive Connectivity Establishment) to connect diverse endpoints across different networks, even those behind firewalls.</li>
                 <li><strong>Multimedia Sharing:</strong> NGCS manages the sharing of various media types within the conference. This can include:

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NG911 ESInet</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+<h1>NG911 ESInet (Emergency Services IP Network)</h1>
+<p>The Backbone of Next Generation 911</p>
+</header>
+
+<main>
+<nav>
+<a href="index.html" style="font-weight:bold; font-size:1.2em;">&larr; Back to Home</a>
+</nav>
+
+<section id="intro">
+<h2>What is ESInet?</h2>
+<p>The Emergency Services IP Network (ESInet) is a secure, managed IP-based network that replaces legacy 911 analog circuits. It enables the transport of voice, text, video, and data between callers, NG911 core services, and PSAPs, supporting advanced features like multimedia sharing and dynamic call routing.</p>
+</section>
+
+<section id="call-flow">
+<h2>ESInet in NG911 Call Flow</h2>
+<div class="diagram-container plantuml-diagram-container">
+<h3>Role of ESInet in Emergency Call Handling</h3>
+<img alt="NG911 ESInet Call Flow Diagram Loading..." />
+<script type="text/plantuml" style="display: none;">
+@startuml
+skinparam defaultFontSize 40
+skinparam scale 0.75
+
+actor Caller
+participant "ESInet / BCF" as BCF
+participant "NGCS" as NGCS
+participant "PSAP" as PSAP
+
+Caller -> BCF : Initiates 911 Call (Voice/Text/Data)
+BCF -> NGCS : Forwards Call/Data
+NGCS -> PSAP : Routes to Appropriate PSAP
+PSAP -> NGCS : Acknowledge, Manage Session
+PSAP -> Caller : Communicate Emergency
+
+@enduml
+</script>
+</div>
+</section>
+
+<section id="features">
+<h2>Key Features of ESInet</h2>
+<ul>
+<li><strong>Supports Multimedia:</strong> Voice, text, images, video, sensor data.</li>
+<li><strong>Secure and Managed:</strong> Encrypted, monitored, resilient.</li>
+<li><strong>Interoperable:</strong> Connects multiple PSAPs, agencies, and services.</li>
+<li><strong>Redundant:</strong> Multiple paths to avoid single points of failure.</li>
+<li><strong>Scalable:</strong> Can grow with demand and new technologies.</li>
+</ul>
+</section>
+
+<section id="conclusion">
+<h2>Conclusion</h2>
+<p>ESInet is the foundational network infrastructure enabling the advanced capabilities of NG911, ensuring reliable, secure, and flexible emergency communications.</p>
+</section>
+</main>
+
+<footer>
+<p>Diagrams rendered using PlantUML.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
