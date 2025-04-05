@@ -19,7 +19,8 @@
 
 <section id="intro">
 <h2>What is ECRF?</h2>
-<p>The Emergency Call Routing Function (ECRF) is a core NGCS component that uses geospatial data to determine the correct PSAP for an emergency call based on the caller's precise location. It replaces legacy routing based on phone numbers or cell towers with GIS-based decision-making.</p>
+<p>The Emergency Call Routing Function (ECRF) is a critical functional element within the Next Generation Core Services (NGCS). Its primary responsibility is to determine the appropriate Public Safety Answering Point (PSAP) or other designated emergency service entity to handle a 911 call, based on the caller's validated location and applicable routing policies.</p>
+<p>It essentially acts as a sophisticated mapping service, translating a precise location (geospatial coordinates or validated civic address) into a specific PSAP destination, replacing the less accurate, table-based routing of legacy systems.</p>
 </section>
 
 <section id="call-flow">
@@ -47,6 +48,33 @@ PSAP -> Caller : Communicate Emergency
 @enduml
 </script>
 </div>
+</section>
+
+<section id="inputs-operation">
+    <h2>Inputs and Operation</h2>
+    <p>The ECRF receives location information and uses it to find the correct destination:</p>
+    <ul>
+        <li><strong>Data Inputs:</strong> Primarily receives validated location information (e.g., latitude/longitude coordinates, or a validated civic address with coordinates) from the Location Validation Function (LVF). It also considers call type or service URN requested.</li>
+        <li><strong>Control Signals:</strong> Receives routing requests from the main NGCS call processing logic. It queries internal policy databases (Policy Store) for rules affecting routing (e.g., time-of-day routing, temporary boundary changes, alternate routing destinations). It interacts heavily with GIS data layers representing PSAP boundaries, law enforcement/fire/EMS response zones, etc.</li>
+        <li><strong>Operation:</strong>
+            <ol>
+                <li>Receives a routing request with validated location data.</li>
+                <li>Performs a spatial query against relevant GIS layers (e.g., "Which PSAP boundary contains these coordinates?").</li>
+                <li>Consults the Policy Store to check for any overriding rules or conditions.</li>
+                <li>Determines the Uniform Resource Identifier (URI) of the target PSAP or agency.</li>
+                <li>Returns the destination URI(s) (primary and potentially alternates) to the NGCS call processing logic, which then instructs the ESInet to route the call.</li>
+            </ol>
+        </li>
+    </ul>
+</section>
+
+<section id="examples">
+    <h2>Examples of ECRF Functionality</h2>
+    <ul>
+        <li><strong>Highway Call Routing:</strong> A call originates from a mobile phone on a highway. The ECRF uses the precise coordinates, potentially combined with direction-of-travel information from the carrier, to query GIS layers representing highway patrol jurisdictions and routes the call to the correct troop barracks or dispatch center, not just the nearest municipal PSAP.</li>
+        <li><strong>Campus Emergency:</strong> A call is placed from a university campus building. The ECRF uses detailed campus GIS data (building footprints, internal response zones) to route the call directly to the campus police department's PSAP, rather than the city PSAP, ensuring a faster, more appropriate response.</li>
+        <li><strong>Maritime Incident:</strong> A distress call comes from a boat offshore. The ECRF uses the provided maritime coordinates to consult Coast Guard jurisdiction layers within the GIS database and routes the call to the appropriate Coast Guard rescue coordination center.</li>
+    </ul>
 </section>
 
 <section id="features">

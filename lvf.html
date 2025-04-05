@@ -19,7 +19,8 @@
 
 <section id="intro">
 <h2>What is LVF?</h2>
-<p>The Location Validation Function (LVF) is a core NGCS component that verifies the validity of a caller's civic address or geospatial coordinates against authoritative GIS data. It ensures that emergency calls are routed based on accurate, validated location information.</p>
+<p>The Location Validation Function (LVF) is a functional element within the Next Generation Core Services (NGCS). Its primary role is to compare location information provided with an incoming emergency call or session against authoritative Geographic Information System (GIS) data for the relevant jurisdiction.</p>
+<p>The goal is to confirm whether the provided location (either a civic address or geospatial coordinates) is valid and exists within the official map data before the call is routed by the ECRF. This prevents routing based on incorrect or non-existent addresses or coordinates.</p>
 </section>
 
 <section id="call-flow">
@@ -49,6 +50,32 @@ PSAP -> Caller : Communicate Emergency
 @enduml
 </script>
 </div>
+</section>
+
+<section id="inputs-operation">
+    <h2>Inputs and Operation</h2>
+    <p>The LVF takes location information and checks it against the official GIS records:</p>
+    <ul>
+        <li><strong>Data Inputs:</strong> Location information associated with the incoming call/session. This could be a civic address (street number, name, city, etc.) or geospatial coordinates (latitude, longitude, potentially altitude).</li>
+        <li><strong>Control Signals:</strong> Receives validation requests from the NGCS call processing logic. It initiates queries to the authoritative GIS database for the relevant jurisdiction.</li>
+        <li><strong>Operation:</strong>
+            <ol>
+                <li>Receives a validation request with location data.</li>
+                <li>Queries the appropriate GIS layers (e.g., address points, street centerlines, service boundaries) using the provided location.</li>
+                <li>Compares the input location with the GIS data to determine validity.</li>
+                <li>Returns a validation status (e.g., Valid, Invalid, Unvalidated) to the NGCS call processing logic. If valid, it may also return the standardized version of the address or the precise coordinates associated with the civic address from the GIS data.</li>
+            </ol>
+        </li>
+    </ul>
+</section>
+
+<section id="examples">
+    <h2>Examples of LVF Functionality</h2>
+    <ul>
+        <li><strong>Civic Address Validation:</strong> A caller provides the address "123 Main St". The LVF queries the GIS database to confirm that "Main St" exists in the specified city and that the number "123" falls within the valid range for that street segment. If confirmed, it returns "Valid" and potentially the coordinates for that address point.</li>
+        <li><strong>Coordinate Validation:</strong> A call provides GPS coordinates. The LVF checks if these coordinates fall within the known service boundaries defined in the GIS data. If the coordinates are outside any known boundary, it might return "Invalid" or "Unvalidated".</li>
+        <li><strong>Handling Typos:</strong> A caller enters "123 Mane St". The LVF might use fuzzy matching against the GIS data to suggest "Main St" or, if no close match is found, return "Invalid", prompting NGCS or the PSAP to seek clarification.</li>
+    </ul>
 </section>
 
 <section id="features">

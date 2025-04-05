@@ -19,7 +19,8 @@
 
 <section id="intro">
 <h2>What is BCF?</h2>
-<p>The Border Control Function (BCF) is a security gateway that manages and protects traffic entering and leaving the ESInet. It enforces security policies, performs protocol normalization, and ensures only authorized traffic reaches NG911 core services and PSAPs.</p>
+<p>The Border Control Function (BCF) acts as the secure gateway or "front door" for the Emergency Services IP Network (ESInet). It sits at the edge of the ESInet, controlling the flow of traffic between external, untrusted networks (like carrier networks or the public internet) and the secure, internal NG911 environment.</p>
+<p>Functionally similar to a Session Border Controller (SBC) combined with a firewall, the BCF enforces security policies, prevents unauthorized access, protects against attacks, and ensures that communication protocols are handled correctly as sessions cross the network boundary.</p>
 </section>
 
 <section id="call-flow">
@@ -46,6 +47,35 @@ PSAP -> Caller : Communicate Emergency
 @enduml
 </script>
 </div>
+</section>
+
+<section id="inputs-operation">
+    <h2>Inputs and Operation</h2>
+    <p>The BCF inspects and manages traffic crossing the ESInet boundary:</p>
+    <ul>
+        <li><strong>Data Inputs:</strong> Receives IP packets containing emergency communication sessions (e.g., SIP signaling, RTP for voice/video, MSRP for text) originating from external networks (wireless/wireline carriers, VoIP providers, alarm companies, etc.).</li>
+        <li><strong>Control Signals:</strong> Configured with security policies, Access Control Lists (ACLs), trusted source information, and potentially Quality of Service (QoS) parameters.</li>
+        <li><strong>Operation:</strong>
+            <ol>
+                <li>Inspects incoming IP packets and session initiation requests (e.g., SIP INVITE).</li>
+                <li>Validates the source against trusted network information and security policies (firewall rules).</li>
+                <li>Performs protocol validation and normalization (e.g., fixing malformed SIP headers, ensuring protocol compliance).</li>
+                <li>May perform topology hiding, preventing external networks from seeing the internal structure of the ESInet.</li>
+                <li>Applies security measures like DoS protection and intrusion prevention.</li>
+                <li>Forwards legitimate, validated traffic into the ESInet towards the appropriate NGCS elements.</li>
+                <li>Manages the signaling and media paths for sessions passing through it.</li>
+            </ol>
+        </li>
+    </ul>
+</section>
+
+<section id="examples">
+    <h2>Examples of BCF Functionality</h2>
+    <ul>
+        <li><strong>Blocking Malicious Traffic:</strong> The BCF identifies and drops a flood of malformed SIP packets originating from an unknown IP address, preventing a potential Denial-of-Service (DoS) attack against NGCS.</li>
+        <li><strong>Authorizing Carrier Traffic:</strong> The BCF receives a SIP INVITE for a 911 call from a known, trusted wireless carrier's network. It validates the source IP against its configured list of trusted peers and allows the session setup request to proceed into the ESInet.</li>
+        <li><strong>Protocol Repair:</strong> An originating network sends a SIP message with a non-standard header. The BCF recognizes the deviation, normalizes the header to comply with NG911 standards, and forwards the corrected message to NGCS, ensuring interoperability.</li>
+    </ul>
 </section>
 
 <section id="features">

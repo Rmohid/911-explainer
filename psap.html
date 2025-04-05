@@ -19,7 +19,8 @@
 
 <section id="intro">
 <h2>What is an NG911 PSAP?</h2>
-<p>A Next Generation 911-enabled PSAP is an emergency call center equipped to receive and process multimedia communications (voice, text, video, data) over IP networks. It integrates with NG911 core services to improve situational awareness and response coordination.</p>
+<p>A Next Generation 911-enabled Public Safety Answering Point (PSAP) represents the evolution of the traditional 911 call center. Instead of relying solely on analog phone lines and basic location displays, NG911 PSAPs utilize IP-based workstations and infrastructure connected to the ESInet.</p>
+<p>This allows them to receive not only voice calls but also text messages (RTT, SMS), images, video feeds, and data from various sources (like IoT devices or telematics systems). They integrate tightly with NGCS for call routing and features, and often feature advanced mapping displays and Computer-Aided Dispatch (CAD) systems capable of handling multimedia information.</p>
 </section>
 
 <section id="call-flow">
@@ -47,6 +48,36 @@ PSAP -> PSAP : Conferencing, Data Sharing, Dispatch
 @enduml
 </script>
 </div>
+</section>
+
+<section id="inputs-operation">
+    <h2>Inputs and Operation</h2>
+    <p>NG911 PSAPs handle incoming emergency communications and coordinate responses:</p>
+    <ul>
+        <li><strong>Data Inputs:</strong> Receives incoming sessions (voice calls, RTT, SMS, video) via SIP and associated media streams (e.g., RTP) from the ESInet/NGCS. Receives validated location data (coordinates, civic address) and potentially supplementary data (caller name, device type, medical info, telematics data) associated with the session.</li>
+        <li><strong>Control Signals:</strong> Receives SIP messages for session control (setup, teardown, hold, transfer, conference). Interacts with the local CAD system, typically via APIs, to log incidents, query resources, and record dispatch actions. Sends SIP requests to NGCS to initiate actions like conferencing external parties or transferring calls.</li>
+        <li><strong>Operation:</strong>
+            <ol>
+                <li>Call Taker workstation receives notification of an incoming session via SIP from the ESInet/NGCS.</li>
+                <li>Call Taker answers the session (voice, text, etc.).</li>
+                <li>Associated location and supplementary data are displayed, often plotted on an integrated GIS map interface.</li>
+                <li>Call Taker communicates with the caller, gathering details.</li>
+                <li>Incident information is entered into the CAD system.</li>
+                <li>Call Taker/Dispatcher uses CAD to identify and dispatch appropriate responders (police, fire, EMS).</li>
+                <li>May use NGCS features (via SIP requests) to conference in translators, specialists, or transfer the call if needed.</li>
+                <li>Session is logged and eventually terminated.</li>
+            </ol>
+        </li>
+    </ul>
+</section>
+
+<section id="examples">
+    <h2>Examples of NG911 PSAP Functionality</h2>
+    <ul>
+        <li><strong>Handling an RTT Call:</strong> The PSAP workstation receives an incoming Real-Time Text session. The call taker engages in a text conversation with the caller, while their location is automatically displayed on the map screen, allowing for efficient dispatch even without voice communication.</li>
+        <li><strong>Utilizing Bystander Video:</strong> During a multi-vehicle accident call, a bystander offers to send video. The PSAP provides a secure link (potentially via NGCS), receives the video stream, and displays it on the call taker/dispatcher screen, providing valuable real-time situational awareness.</li>
+        <li><strong>Processing Telematics Data:</strong> Following a vehicle crash, the PSAP receives an automated notification from the car's telematics system via the ESInet. This data includes precise location, airbag deployment status, and impact severity, which appears directly in the CAD incident alongside the subsequent voice call from the driver, allowing for a more informed dispatch.</li>
+    </ul>
 </section>
 
 <section id="features">

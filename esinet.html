@@ -19,7 +19,8 @@
 
 <section id="intro">
 <h2>What is ESInet?</h2>
-<p>The Emergency Services IP Network (ESInet) is a secure, managed IP-based network that replaces legacy 911 analog circuits. It enables the transport of voice, text, video, and data between callers, NG911 core services, and PSAPs, supporting advanced features like multimedia sharing and dynamic call routing.</p>
+<p>The Emergency Services IP Network (ESInet) is a private, secure, managed IP-based network specifically designed for emergency communications. It serves as the foundational transport layer for NG911, replacing the legacy network of analog circuits and selective routers. Unlike the public internet, the ESInet is a controlled environment with guaranteed quality of service, high availability, and robust security measures.</p>
+<p>It interconnects various entities involved in emergency response, including Public Safety Answering Points (PSAPs), Next Generation Core Services (NGCS) functional elements, originating networks (via Border Control Functions), and potentially other authorized agencies or services.</p>
 </section>
 
 <section id="call-flow">
@@ -46,6 +47,25 @@ PSAP -> Caller : Communicate Emergency
 @enduml
 </script>
 </div>
+</section>
+
+<section id="inputs-operation">
+    <h2>Inputs and Operation</h2>
+    <p>The ESInet operates based on standard Internet Protocol (IP) principles but within a controlled environment. Its primary inputs are IP packets containing emergency communications data and control signals:</p>
+    <ul>
+        <li><strong>Data Inputs:</strong> Encapsulated emergency communications, including VoIP packets (voice), RTT messages (text), video streams, images, sensor data (e.g., from IoT devices or telematics), and CAD data. This data typically enters the ESInet via a Border Control Function (BCF) from originating networks.</li>
+        <li><strong>Control Signals:</strong> Protocols like Session Initiation Protocol (SIP) are used to establish, manage, and terminate communication sessions (calls, text sessions) across the network. Routing protocols (e.g., BGP, OSPF) manage the paths data takes across the ESInet.</li>
+        <li><strong>Operation:</strong> The ESInet uses IP routing to forward packets towards their destination (e.g., an NGCS function or a specific PSAP). Quality of Service (QoS) mechanisms prioritize emergency traffic over less critical data. Redundant paths and equipment ensure high availability and resilience against failures.</li>
+    </ul>
+</section>
+
+<section id="examples">
+    <h2>Examples of ESInet Functionality</h2>
+    <ul>
+        <li><strong>VoIP Call with Location:</strong> When a user makes an NG911 call from a smartphone app, the VoIP packets and precise location data (e.g., GPS coordinates) are encapsulated into IP packets. These packets traverse the ESInet, guided by NGCS routing decisions, to reach the appropriate PSAP.</li>
+        <li><strong>Real-Time Text (RTT) Session:</strong> An RTT message initiated by a caller enters the ESInet. The network transports the text packets reliably, maintaining the session context via SIP signaling, allowing the PSAP call taker to have a real-time text conversation.</li>
+        <li><strong>Inter-PSAP Data Transfer:</strong> During a major incident requiring mutual aid, CAD incident data needs to be shared between two PSAPs. The ESInet provides the secure IP pathway for this data transfer, ensuring both PSAPs have synchronized information.</li>
+    </ul>
 </section>
 
 <section id="features">

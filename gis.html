@@ -19,7 +19,8 @@
 
 <section id="intro">
 <h2>What is the GIS Database?</h2>
-<p>The Geographic Information System (GIS) database in NG911 contains authoritative, real-time geospatial data used for location validation and call routing. It replaces legacy address databases with precise, map-based information, improving accuracy and enabling advanced features.</p>
+<p>The Geographic Information System (GIS) database is the authoritative source of geospatial data used by NG911 systems. It's typically not a single database but rather a collection of standardized data layers maintained by local and regional governments. These layers include road centerlines, address points, PSAP boundaries, emergency service zones (police, fire, EMS), and other relevant geographic features.</p>
+<p>This rich, map-based data replaces the simpler, tabular MSAG/ALI databases of legacy 911, enabling highly accurate location validation and geospatial call routing.</p>
 </section>
 
 <section id="call-flow">
@@ -49,6 +50,25 @@ PSAP -> Caller : Communicate Emergency
 @enduml
 </script>
 </div>
+</section>
+
+<section id="inputs-operation">
+    <h2>Inputs and Operation</h2>
+    <p>The GIS database primarily responds to queries from NGCS functions:</p>
+    <ul>
+        <li><strong>Data Inputs/Queries:</strong> Receives query requests from LVF containing a civic address or coordinates to be validated. Receives queries from ECRF containing validated coordinates to determine the appropriate PSAP or response zone. May also receive queries from PSAP applications for map display data.</li>
+        <li><strong>Control Signals:</strong> Receives standardized query requests (e.g., using OGC standards like WFS or specific NENA standards). Requires regular data updates from authoritative sources (e.g., local planning departments) to remain accurate.</li>
+        <li><strong>Operation:</strong> Executes spatial queries against its data layers. For LVF queries, it checks for the existence and validity of addresses/coordinates. For ECRF queries, it performs point-in-polygon tests or other spatial analyses to determine which boundary contains the location. It returns standardized responses, such as validation status, coordinates, or boundary identifiers.</li>
+    </ul>
+</section>
+
+<section id="examples">
+    <h2>Examples of GIS Database Functionality</h2>
+    <ul>
+        <li><strong>Address Validation Support:</strong> When queried by the LVF about "123 Main St", the GIS database checks its address point layer and road centerline layer to confirm the address exists and returns a "Valid" status along with the official coordinates.</li>
+        <li><strong>PSAP Boundary Determination:</strong> The ECRF provides coordinates for a caller. The GIS database performs a spatial query against the PSAP boundary layer and returns the unique ID of the PSAP whose boundary polygon contains those coordinates.</li>
+        <li><strong>Providing Contextual Map Data:</strong> A PSAP's CAD system requests map layers for the area around an incident location. The GIS database provides road networks, building footprints, hydrant locations, and other relevant layers to display on the dispatcher's map, enhancing situational awareness.</li>
+    </ul>
 </section>
 
 <section id="features">

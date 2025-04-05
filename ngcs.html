@@ -19,7 +19,8 @@
 
 <section id="intro">
 <h2>What is NGCS?</h2>
-<p>Next Generation Core Services (NGCS) are the essential software components within the ESInet that enable advanced call routing, location validation, policy enforcement, and conferencing. NGCS ensures calls are delivered accurately and efficiently to the correct PSAP with rich contextual data.</p>
+<p>Next Generation Core Services (NGCS) represent the "intelligence" layer of the NG911 system, residing within the ESInet. It's not a single entity but rather a suite of interconnected functional elements (FEs) that work together to manage emergency calls and data sessions. Key FEs often include the ECRF (routing), LVF (location validation), Policy Store (routing rules), Logging Services, and functions for managing media and conferencing.</p>
+<p>NGCS orchestrates the call handling process, ensuring calls are validated, routed to the most appropriate PSAP based on precise location and defined policies, and enriched with relevant data before delivery.</p>
 </section>
 
 <section id="call-flow">
@@ -47,6 +48,34 @@ PSAP -> Caller : Communicate Emergency
 @enduml
 </script>
 </div>
+</section>
+
+<section id="inputs-operation">
+    <h2>Inputs and Operation</h2>
+    <p>NGCS processes incoming emergency requests and coordinates the actions needed to route them correctly:</p>
+    <ul>
+        <li><strong>Data Inputs:</strong> Session initiation requests (via SIP) containing caller information (ID, device type), media type (voice, text, video), and crucially, location information (civic address or geospatial coordinates) received from the BCF/ESInet.</li>
+        <li><strong>Control Signals:</strong> Receives SIP messages to manage sessions. It initiates queries to internal components like the Policy Store and external ones like the GIS Database (via LVF/ECRF). It sends SIP messages and routing instructions to PSAP gateways or other network elements via the ESInet.</li>
+        <li><strong>Operation:</strong>
+            <ol>
+                <li>Receives an incoming call/session request from the ESInet.</li>
+                <li>Uses the LVF to query the GIS database and validate the provided location.</li>
+                <li>Uses the ECRF to determine the appropriate destination PSAP based on the validated location and routing policies (from the Policy Store).</li>
+                <li>Instructs the ESInet to route the call/session to the selected PSAP gateway.</li>
+                <li>Manages session features like call conferencing, media transcoding (if needed), and call transfer requests.</li>
+                <li>Logs significant events for auditing and reporting.</li>
+            </ol>
+        </li>
+    </ul>
+</section>
+
+<section id="examples">
+    <h2>Examples of NGCS Functionality</h2>
+    <ul>
+        <li><strong>Geospatial Routing Near Boundary:</strong> A call comes in with GPS coordinates very close to a county line. NGCS (using ECRF/LVF/GIS) precisely determines the correct county's PSAP and routes the call there, avoiding misdirection common in legacy systems.</li>
+        <li><strong>Policy-Based Routing During Outage:</strong> A policy is configured in the NGCS Policy Store stating that if PSAP A is unavailable (detected via monitoring), calls for its jurisdiction should route to PSAP B. When PSAP A fails, NGCS automatically implements this policy for incoming calls.</li>
+        <li><strong>Initiating Multimedia Conference:</strong> A PSAP call taker requests a video conference with a remote sign language interpreter. The PSAP sends a SIP request to NGCS, which then initiates a new SIP session with the interpreter service and bridges the video/audio streams into the existing 911 call session.</li>
+    </ul>
 </section>
 
 <section id="features">
