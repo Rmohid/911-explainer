@@ -66,6 +66,7 @@ PSAP -> Caller : Communicate Emergency
                 <li>Returns a validation status (e.g., Valid, Invalid, Unvalidated) to the NGCS call processing logic. If valid, it may also return the standardized version of the address or the precise coordinates associated with the civic address from the GIS data.</li>
             </ol>
         </li>
+        <li><strong>Outputs:</strong> Returns a validation response to the NGCS call processing logic. This response includes a status code (Valid, Invalid, Unvalidated) and, if the location was successfully validated, the authoritative version of the location (either standardized civic address or precise coordinates) obtained from the GIS database.</li>
     </ul>
 </section>
 

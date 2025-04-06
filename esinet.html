@@ -56,6 +56,7 @@ PSAP -> Caller : Communicate Emergency
         <li><strong>Data Inputs:</strong> Encapsulated emergency communications, including VoIP packets (voice), RTT messages (text), video streams, images, sensor data (e.g., from IoT devices or telematics), and CAD data. This data typically enters the ESInet via a Border Control Function (BCF) from originating networks.</li>
         <li><strong>Control Signals:</strong> Protocols like Session Initiation Protocol (SIP) are used to establish, manage, and terminate communication sessions (calls, text sessions) across the network. Routing protocols (e.g., BGP, OSPF) manage the paths data takes across the ESInet.</li>
         <li><strong>Operation:</strong> The ESInet uses IP routing to forward packets towards their destination (e.g., an NGCS function or a specific PSAP). Quality of Service (QoS) mechanisms prioritize emergency traffic over less critical data. Redundant paths and equipment ensure high availability and resilience against failures.</li>
+        <li><strong>Outputs:</strong> Delivers IP packets (containing voice, text, data, video, control signals) to the next hop or final destination within the ESInet, such as an NGCS functional element, a PSAP gateway, or another interconnected ESInet via a BCF.</li>
     </ul>
 </section>
 

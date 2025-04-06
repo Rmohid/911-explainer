@@ -1,0 +1,149 @@
+update the index to pull all the new content in<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NG911 Routing Data in Protocols</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+<h1>NG911 Routing Data in Protocols</h1>
+<p>How Emergency Calls are Routed Correctly Using Protocol Elements</p>
+</header>
+
+<main>
+<nav>
+<a href="index.html" style="font-weight:bold; font-size:1.2em;">&larr; Back to Home</a>
+</nav>
+
+<section id="intro">
+<h2>What are NG911 Routing Protocol Elements?</h2>
+<p>In NG911, correct call routing depends on standardized protocol elements embedded in SIP signaling. These elements convey the caller's intent, service type, and location, enabling NGCS and ECRF to determine the appropriate PSAP or emergency service destination.</p>
+<p>Key elements include:</p>
+<ul>
+<li><strong>Service URNs (Uniform Resource Names):</strong> Special identifiers in the SIP Request-URI or headers indicating the type of emergency service requested, e.g., <code>urn:service:sos</code>, <code>urn:service:sos.police</code>, <code>urn:service:sos.fire</code>.</li>
+<li><strong>Route Headers:</strong> SIP headers that can influence routing by specifying intermediate or target URIs.</li>
+<li><strong>Request-URI:</strong> The SIP URI that initially targets the emergency service, often containing the service URN.</li>
+<li><strong>Location Data:</strong> PIDF-LO documents or Geolocation headers, used by ECRF to select the correct PSAP based on geography.</li>
+<li><strong>Policy Information:</strong> Internal to NGCS, policies may override or influence routing based on time, load, or failover conditions.</li>
+</ul>
+
+<h3>Routing-Related SIP Header Structures</h3>
+<p>NG911 uses several SIP headers and URI elements to convey routing information:</p>
+
+<ul>
+<li><strong>Request-URI:</strong> The main target URI of the SIP INVITE. Initially, this contains a service URN like <code>urn:service:sos</code> or <code>urn:service:sos.fire</code>. After NGCS determines the correct PSAP, it updates the Request-URI to the SIP URI of that PSAP, e.g., <code>sips:psap123@esinet.example.gov</code>.</li>
+
+<li><strong>Route Header:</strong> A SIP header that specifies intermediate hops or proxies the request should traverse. NGCS may insert a Route header pointing to the PSAP or a specific gateway.</li>
+
+<li><strong>Service-Route Header:</strong> Used in SIP REGISTER responses to indicate the preferred route for subsequent requests from a device or network. Can influence how emergency calls are routed through the network.</li>
+</ul>
+
+<p><strong>Example Initial INVITE:</strong></p>
+<pre>
+INVITE urn:service:sos.fire SIP/2.0
+Via: SIP/2.0/TLS device.example.com;branch=...
+From: <sip:+15551234567@carrier.example.com>
+To: <urn:service:sos.fire>
+Geolocation: <cid:loc123@device.example.com>;inserted-by=endpoint;used-for-routing
+</pre>
+
+<p><strong>Example After NGCS Routing:</strong></p>
+<pre>
+INVITE sips:psap123@esinet.example.gov SIP/2.0
+Route: <sips:proxy.esinet.example.gov;lr>
+Via: SIP/2.0/TLS ngcs.example.com;branch=...
+From: <sip:+15551234567@carrier.example.com>
+To: <urn:service:sos.fire>
+Geolocation: <cid:loc123@device.example.com>;inserted-by=endpoint;used-for-routing
+</pre>
+
+<p><strong>Key Parameters and Fields:</strong></p>
+<ul>
+<li><code>lr</code> parameter in Route header: Indicates loose routing, allowing proxies to forward requests flexibly.</li>
+<li><code>To</code> header: Maintains the original service URN for context, even after routing.</li>
+<li><code>Geolocation</code> header: Carries location info used in routing decisions.</li>
+<li><code>Request-URI</code>: Updated by NGCS to target the selected PSAP's SIP URI.</li>
+</ul>
+</section>
+
+<section id="inputs-operation">
+<h2>Inputs and Operation</h2>
+<ul>
+<li><strong>Data Inputs:</strong> SIP INVITE messages containing:
+    <ul>
+        <li>Service URNs in the Request-URI or <code>Service-Route</code> headers.</li>
+        <li>Location data (PIDF-LO, Geolocation headers).</li>
+        <li>Caller identity and device information.</li>
+    </ul>
+</li>
+<li><strong>Control Signals:</strong> SIP routing headers, internal NGCS policies, and ECRF queries.</li>
+<li><strong>Operation:</strong>
+<ol>
+<li>The originating device/network sends a SIP INVITE with a service URN and location data.</li>
+<li>The BCF forwards the SIP INVITE to NGCS.</li>
+<li>NGCS uses the service URN and location data to query the ECRF.</li>
+<li>The ECRF returns the URI(s) of the appropriate PSAP(s).</li>
+<li>NGCS updates the SIP Request-URI and/or Route headers to target the selected PSAP.</li>
+<li>The call is routed via the ESInet to the PSAP.</li>
+</ol>
+</li>
+<li><strong>Outputs:</strong> A SIP INVITE message with updated routing information (Request-URI, Route headers) targeting the correct PSAP, along with embedded location data for situational awareness.</li>
+</ul>
+</section>
+
+<section id="examples">
+<h2>Examples of Routing Data in Protocols</h2>
+<ul>
+<li><strong>Service URN:</strong> <code>urn:service:sos.fire</code> indicates a fire emergency, guiding NGCS to route the call to a fire dispatch PSAP.</li>
+<li><strong>Request-URI Update:</strong> NGCS replaces the initial Request-URI with the URI of the selected PSAP after ECRF query.</li>
+<li><strong>Policy Override:</strong> During a PSAP outage, NGCS applies a policy to route calls to a backup PSAP, updating the routing headers accordingly.</li>
+</ul>
+</section>
+
+<section id="uml">
+<h2>Routing Data Flow in NG911</h2>
+<div class="diagram-container plantuml-diagram-container">
+<h3>Sequence of Routing Data Transmission</h3>
+<img alt="NG911 Routing Data Flow Diagram Loading..." />
+<script type="text/plantuml" style="display: none;">
+@startuml
+skinparam defaultFontSize 40
+skinparam scale 0.75
+
+actor "Caller Device" as Caller
+participant "Originating Network" as Origin
+participant "BCF" as BCF
+participant "NGCS" as NGCS
+participant "ECRF" as ECRF
+participant "PSAP" as PSAP
+
+Caller -> Origin : Create SIP INVITE with Service URN + Location
+Origin -> BCF : Send SIP INVITE
+BCF -> NGCS : Forward SIP INVITE
+NGCS -> ECRF : Query with Service URN + Location
+ECRF --> NGCS : Return PSAP URI(s)
+NGCS -> PSAP : Forward SIP INVITE with updated routing
+PSAP -> PSAP : Answer and handle call
+
+@enduml
+</script>
+</div>
+</section>
+
+<section id="conclusion">
+<h2>Conclusion</h2>
+<p>NG911 uses standardized protocol elements like service URNs, SIP headers, and embedded location data to ensure emergency calls are routed accurately and efficiently to the appropriate PSAP or emergency service provider.</p>
+</section>
+
+</main>
+
+<footer>
+<p>Diagrams rendered using PlantUML.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

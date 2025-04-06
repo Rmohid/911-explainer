@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TLS in NG911</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+<h1>TLS (Transport Layer Security) in NG911</h1>
+<p>Securing Emergency Communications</p>
+</header>
+
+<main>
+<nav>
+<a href="index.html" style="font-weight:bold; font-size:1.2em;">&larr; Back to Home</a>
+</nav>
+
+<section id="intro">
+<h2>What is TLS?</h2>
+<p>Transport Layer Security (TLS) is a cryptographic protocol that provides secure communication over IP networks. It ensures confidentiality, integrity, and authentication of data exchanged between endpoints.</p>
+<p>In NG911, TLS is essential to protect sensitive emergency communications from interception, tampering, and impersonation.</p>
+</section>
+
+<section id="tls-ng911">
+<h2>TLS in NG911</h2>
+<ul>
+<li><strong>Where Used:</strong>  
+    <ul>
+        <li>SIP signaling (using <code>sips:</code> URIs) between originating networks, ESInet, NGCS, and PSAPs.</li>
+        <li>HTTPS connections for data services (e.g., HELD location retrieval, web services).</li>
+        <li>Media encryption (via SRTP) often negotiated alongside TLS.</li>
+    </ul>
+</li>
+<li><strong>Why Important:</strong>  
+    <ul>
+        <li>Protects caller privacy and sensitive data.</li>
+        <li>Prevents call hijacking or spoofing.</li>
+        <li>Ensures integrity of routing and location information.</li>
+        <li>Enables mutual authentication between trusted entities.</li>
+    </ul>
+</li>
+</ul>
+</section>
+
+<section id="inputs-operation">
+<h2>Inputs and Operation</h2>
+<ul>
+<li><strong>Data Inputs:</strong> Certificates (X.509), supported cipher suites, SIP messages, HTTP requests, media streams.</li>
+<li><strong>Control Signals:</strong> TLS handshake messages (ClientHello, ServerHello, Certificate, Key Exchange, Finished), SIP over TLS session setup, SRTP key negotiation.</li>
+<li><strong>Operation:</strong>
+<ol>
+<li>Endpoints exchange certificates and negotiate encryption parameters during the TLS handshake.</li>
+<li>Mutual authentication is performed (both sides validate certificates).</li>
+<li>Session keys are established for encrypting SIP signaling and data.</li>
+<li>Media encryption keys (for SRTP) are exchanged via SIP (SDP) within the TLS-protected channel.</li>
+<li>All subsequent signaling and media are encrypted.</li>
+</ol>
+</li>
+<li><strong>Outputs:</strong> Encrypted SIP signaling, encrypted media streams, authenticated and integrity-protected sessions.</li>
+</ul>
+</section>
+
+<section id="examples">
+<h2>Examples of TLS Usage in NG911</h2>
+<ul>
+<li><strong>SIP over TLS:</strong> Calls use <code>sips:</code> URIs, e.g., <code>sips:psap123@esinet.example.gov</code>, ensuring signaling is encrypted end-to-end.</li>
+<li><strong>HTTPS for Location:</strong> Devices retrieve location info securely from a HELD server via HTTPS.</li>
+<li><strong>SRTP Media:</strong> Voice and video streams are encrypted using keys exchanged over the TLS-protected SIP session.</li>
+<li><strong>Certificate Validation:</strong> PSAP verifies the certificate of the NGCS before accepting calls, preventing spoofing.</li>
+</ul>
+</section>
+
+<section id="uml">
+<h2>TLS Handshake and Secure Call Setup</h2>
+<div class="diagram-container plantuml-diagram-container">
+<h3>Sequence of TLS in NG911</h3>
+<img alt="NG911 TLS Handshake Diagram Loading..." />
+<script type="text/plantuml" style="display: none;">
+@startuml
+skinparam defaultFontSize 40
+skinparam scale 0.75
+
+actor "Caller Device" as Caller
+participant "Originating Network" as Origin
+participant "BCF" as BCF
+participant "NGCS" as NGCS
+participant "PSAP" as PSAP
+
+Caller -> Origin : Initiate 911 Call
+Origin -> BCF : TLS Handshake (mutual auth)
+BCF -> NGCS : TLS Handshake (mutual auth)
+NGCS -> PSAP : TLS Handshake (mutual auth)
+Origin -> BCF : SIP INVITE over TLS
+BCF -> NGCS : Forward SIP INVITE over TLS
+NGCS -> PSAP : Forward SIP INVITE over TLS
+PSAP -> PSAP : Decrypt, process call
+PSAP -> Caller : Media encrypted via SRTP
+
+@enduml
+</script>
+</div>
+</section>
+
+<section id="conclusion">
+<h2>Conclusion</h2>
+<p>TLS is a foundational security technology in NG911, ensuring that emergency communications are confidential, authenticated, and protected from tampering across the entire call path.</p>
+</section>
+
+</main>
+
+<footer>
+<p>Diagrams rendered using PlantUML.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NG911 Location Data in Protocols</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+<h1>NG911 Location Data in Protocols</h1>
+<p>How Location Information is Carried in Emergency Communications</p>
+</header>
+
+<main>
+<nav>
+<a href="index.html" style="font-weight:bold; font-size:1.2em;">&larr; Back to Home</a>
+</nav>
+
+<section id="intro">
+<h2>What are NG911 Location Protocol Elements?</h2>
+<p>In NG911, accurate caller location is critical and is embedded directly within the signaling protocols used to set up emergency sessions. The primary protocol is SIP (Session Initiation Protocol), which carries location data using standardized formats and headers.</p>
+<p>The key standards and elements include:</p>
+<ul>
+<li><strong>PIDF-LO (Presence Information Data Format - Location Object):</strong> An XML document embedded in SIP messages that contains the caller's location, either as civic address, geodetic coordinates, or both.</li>
+<li><strong>Geolocation Header:</strong> A SIP header that references or includes the PIDF-LO document.</li>
+<li><strong>Location Conveyance (RFC 6442):</strong> Defines how to include or reference location data in SIP signaling.</li>
+<li><strong>HELD (HTTP-Enabled Location Delivery):</strong> A protocol used by devices to obtain their location from a Location Information Server (LIS) before embedding it in SIP.</li>
+</ul>
+
+<h3>Geolocation Header Structure</h3>
+<p>The <code>Geolocation</code> SIP header is defined in RFC 6442 and is used to convey the caller's location information. It can either:</p>
+<ul>
+<li>Contain a URI pointing to a location resource (e.g., a HELD URI), or</li>
+<li>Embed the PIDF-LO XML document inline as a message body with a Content-ID referenced by the header.</li>
+</ul>
+<p>Example header referencing a URI:</p>
+<pre>Geolocation: <sip:lis.example.com/location/1234>;inserted-by=endpoint;used-for-routing</pre>
+<p>Example header referencing an inline PIDF-LO:</p>
+<pre>Geolocation: <cid:123456789@caller-device>;inserted-by=endpoint;used-for-routing</pre>
+
+<p><strong>Key Parameters:</strong></p>
+<ul>
+<li><code>inserted-by</code>: Indicates who inserted the location info (e.g., "endpoint", "access-network").</li>
+<li><code>used-for-routing</code>: Indicates this location should be used for routing decisions.</li>
+<li><code>routing-allowed</code>: (Optional) Indicates whether the location URI can be dereferenced by downstream entities.</li>
+</ul>
+
+<p><strong>Associated Message Body:</strong></p>
+<ul>
+<li>If the header references a Content-ID (cid:), the SIP message will include a multipart body with the PIDF-LO XML as one part, identified by the matching Content-ID.</li>
+<li>The PIDF-LO contains detailed location info, including civic address, geodetic coordinates, method of determination, and confidence level.</li>
+</ul>
+</section>
+
+<section id="inputs-operation">
+<h2>Inputs and Operation</h2>
+<ul>
+<li><strong>Data Inputs:</strong> The caller's device or originating network obtains the caller's location (via GPS, Wi-Fi, cell triangulation, or manual entry). This location is formatted as a PIDF-LO XML document.</li>
+<li><strong>Control Signals:</strong> The SIP INVITE message initiating the emergency call/session includes a <code>Geolocation</code> header, which either contains the PIDF-LO inline or references it via a URL (e.g., HELD URI).</li>
+<li><strong>Operation:</strong>
+<ol>
+<li>The device or network embeds the PIDF-LO in the SIP INVITE.</li>
+<li>The SIP message is sent through the BCF and ESInet to NGCS.</li>
+<li>NGCS extracts the PIDF-LO, validates the location (via LVF), and uses it for routing (via ECRF).</li>
+<li>The PIDF-LO is forwarded to the PSAP, where it is displayed on the call taker's interface.</li>
+</ol>
+</li>
+<li><strong>Outputs:</strong> The embedded or referenced PIDF-LO document is made available to NGCS components and PSAPs, enabling accurate routing and situational awareness.</li>
+</ul>
+</section>
+
+<section id="examples">
+<h2>Examples of Location Data in Protocols</h2>
+<ul>
+<li><strong>SIP INVITE with Inline PIDF-LO:</strong> The <code>Geolocation</code> header contains a base64-encoded PIDF-LO XML document with latitude, longitude, and civic address.</li>
+<li><strong>SIP INVITE with Geolocation URI:</strong> The <code>Geolocation</code> header contains a URL pointing to a HELD server where the PIDF-LO can be retrieved.</li>
+<li><strong>PIDF-LO Content:</strong> Includes elements like <code><gml:Point></code> for coordinates, <code><civicAddress></code> for street address, and metadata like location method and confidence.</li>
+</ul>
+</section>
+
+<section id="uml">
+<h2>Location Data Flow in NG911</h2>
+<div class="diagram-container plantuml-diagram-container">
+<h3>Sequence of Location Data Transmission</h3>
+<img alt="NG911 Location Data Flow Diagram Loading..." />
+<script type="text/plantuml" style="display: none;">
+@startuml
+skinparam defaultFontSize 40
+skinparam scale 0.75
+
+actor "Caller Device" as Caller
+participant "Originating Network" as Origin
+participant "BCF" as BCF
+participant "NGCS" as NGCS
+participant "PSAP" as PSAP
+
+Caller -> Origin : Obtain Location (GPS, Wi-Fi, etc.)
+Origin -> Origin : Create PIDF-LO
+Origin -> BCF : SIP INVITE + Geolocation Header
+BCF -> NGCS : Forward SIP INVITE + PIDF-LO
+NGCS -> NGCS : Extract, Validate, Route
+NGCS -> PSAP : Forward SIP INVITE + PIDF-LO
+PSAP -> PSAP : Display Location to Call Taker
+
+@enduml
+</script>
+</div>
+</section>
+
+<section id="conclusion">
+<h2>Conclusion</h2>
+<p>NG911 relies on standardized protocol elements like PIDF-LO and SIP headers to carry precise caller location from the originating device all the way to the PSAP. This enables accurate routing, faster response, and enhanced situational awareness for emergency services.</p>
+</section>
+
+</main>
+
+<footer>
+<p>Diagrams rendered using PlantUML.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

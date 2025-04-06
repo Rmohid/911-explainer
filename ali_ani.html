@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NG911 ANI and ALI Data</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+<h1>NG911 ANI and ALI Data</h1>
+<p>Caller Identification and Location in Emergency Calls</p>
+</header>
+
+<main>
+<nav>
+<a href="index.html" style="font-weight:bold; font-size:1.2em;">&larr; Back to Home</a>
+</nav>
+
+<section id="intro">
+<h2>What are ANI and ALI?</h2>
+<p><strong>ANI (Automatic Number Identification)</strong> is the caller's phone number, used to identify the calling party. In legacy 911, ANI is sent by the carrier's switch to the selective router and PSAP.</p>
+<p><strong>ALI (Automatic Location Identification)</strong> is the caller's registered address or location, retrieved by querying a database using the ANI. In legacy systems, ALI provides the fixed address for landlines or the last known location for wireless calls.</p>
+<p>In NG911, ANI and ALI concepts persist but are integrated with IP-based protocols and richer location data (e.g., PIDF-LO). They remain important for caller identification, callback, and initial location info.</p>
+</section>
+
+<section id="inputs-operation">
+<h2>Inputs and Operation</h2>
+<ul>
+<li><strong>Data Inputs:</strong>
+    <ul>
+        <li><strong>ANI:</strong> The caller's phone number, obtained from the originating network and included in SIP headers.</li>
+        <li><strong>ALI:</strong> The caller's registered address or last known location, retrieved from a legacy ALI database or included as part of PIDF-LO in NG911.</li>
+    </ul>
+</li>
+<li><strong>Control Signals:</strong> In legacy systems, triggers a query to the ALI database using ANI. In NG911, ALI data may be embedded in the call setup or retrieved via integration with legacy databases.</li>
+<li><strong>Operation:</strong>
+<ol>
+<li>Caller initiates a 911 call; originating network provides ANI.</li>
+<li>In legacy, PSAP queries ALI database using ANI to get location.</li>
+<li>In NG911, ANI is included in SIP headers; ALI data may be embedded in PIDF-LO or retrieved from legacy systems.</li>
+<li>PSAP receives ANI for callback and ALI for initial location info.</li>
+</ol>
+</li>
+<li><strong>Outputs:</strong> Provides caller identity (phone number) and initial location data to NGCS and PSAPs, enabling callback and dispatch.</li>
+</ul>
+</section>
+
+<section id="examples">
+<h2>Examples of ANI and ALI Data</h2>
+<ul>
+<li><strong>ANI in SIP:</strong> Appears in the <code>From</code> header, e.g., <code>From: <sip:+15551234567@carrier.example.com></code>, or in <code>P-Asserted-Identity</code> header for network-asserted identity.</li>
+<li><strong>ALI Database Query:</strong> Legacy PSAP queries ALI database with ANI, receives fixed address "123 Main St, Anytown".</li>
+<li><strong>NG911 Integration:</strong> ALI data included in PIDF-LO XML, providing both civic address and geodetic coordinates, along with ANI in SIP headers.</li>
+</ul>
+</section>
+
+<section id="headers">
+<h2>ANI and ALI in Protocols</h2>
+<p><strong>ANI:</strong></p>
+<ul>
+<li>Included in SIP <code>From</code> header as the caller's URI.</li>
+<li>May also appear in <code>P-Asserted-Identity</code> header, which is trusted by downstream elements.</li>
+<li>Used for callback and identification.</li>
+</ul>
+
+<p><strong>ALI:</strong></p>
+<ul>
+<li>In legacy, retrieved via database query using ANI.</li>
+<li>In NG911, included as part of PIDF-LO XML embedded or referenced in SIP signaling.</li>
+<li>Contains civic address, coordinates, and metadata.</li>
+</ul>
+
+<p><strong>Example SIP Headers:</strong></p>
+<pre>
+From: <sip:+15551234567@carrier.example.com>
+P-Asserted-Identity: <sip:+15551234567@carrier.example.com>
+Geolocation: <cid:loc123@device.example.com>;inserted-by=endpoint;used-for-routing
+</pre>
+</section>
+
+<section id="uml">
+<h2>ANI and ALI Data Flow in NG911</h2>
+<div class="diagram-container plantuml-diagram-container">
+<h3>Sequence of ANI/ALI Data Transmission</h3>
+<img alt="NG911 ANI/ALI Data Flow Diagram Loading..." />
+<script type="text/plantuml" style="display: none;">
+@startuml
+skinparam defaultFontSize 40
+skinparam scale 0.75
+
+actor "Caller Device" as Caller
+participant "Originating Network" as Origin
+participant "BCF" as BCF
+participant "NGCS" as NGCS
+participant "ALI Database" as ALI
+participant "PSAP" as PSAP
+
+Caller -> Origin : Initiate 911 Call
+Origin -> BCF : SIP INVITE with ANI
+BCF -> NGCS : Forward SIP INVITE
+NGCS -> ALI : (Optional) Query ALI Database with ANI
+ALI --> NGCS : Return Location Data
+NGCS -> PSAP : Forward SIP INVITE + Location
+PSAP -> PSAP : Display Caller ID and Location
+
+@enduml
+</script>
+</div>
+</section>
+
+<section id="conclusion">
+<h2>Conclusion</h2>
+<p>ANI and ALI remain important in NG911 for caller identification and initial location information. They are integrated with IP-based protocols and richer data formats to support accurate routing and response.</p>
+</section>
+
+</main>
+
+<footer>
+<p>Diagrams rendered using PlantUML.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

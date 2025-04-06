@@ -59,6 +59,7 @@ PSAP -> Caller : Communicate Emergency
         <li><strong>Data Inputs/Queries:</strong> Receives query requests from LVF containing a civic address or coordinates to be validated. Receives queries from ECRF containing validated coordinates to determine the appropriate PSAP or response zone. May also receive queries from PSAP applications for map display data.</li>
         <li><strong>Control Signals:</strong> Receives standardized query requests (e.g., using OGC standards like WFS or specific NENA standards). Requires regular data updates from authoritative sources (e.g., local planning departments) to remain accurate.</li>
         <li><strong>Operation:</strong> Executes spatial queries against its data layers. For LVF queries, it checks for the existence and validity of addresses/coordinates. For ECRF queries, it performs point-in-polygon tests or other spatial analyses to determine which boundary contains the location. It returns standardized responses, such as validation status, coordinates, or boundary identifiers.</li>
+        <li><strong>Outputs:</strong> Returns the results of spatial queries to the requesting function (LVF, ECRF, PSAP applications). This includes validation statuses, authoritative coordinates, standardized civic addresses, PSAP/agency boundary identifiers, or requested map layer data.</li>
     </ul>
 </section>
 

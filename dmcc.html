@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DMCC in NG911 PSAPs</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header>
+<h1>DMCC (Device, Media, and Call Control)</h1>
+<p>Controlling Devices and Media in NG911 PSAP Environments</p>
+</header>
+
+<main>
+<nav>
+<a href="index.html" style="font-weight:bold; font-size:1.2em;">&larr; Back to Home</a>
+</nav>
+
+<section id="intro">
+<h2>What is DMCC?</h2>
+<p>Device, Media, and Call Control (DMCC) is an Avaya API and protocol suite that allows applications to control telephony devices, manage media streams, and handle call signaling. It is part of the Avaya Aura Application Enablement Services (AES) platform.</p>
+<p>In NG911 PSAPs, DMCC is often used to integrate call handling software with physical or virtual phone devices, enabling advanced features like call control, media recording, and device status monitoring.</p>
+</section>
+
+<section id="inputs-operation">
+<h2>Inputs and Operation</h2>
+<ul>
+<li><strong>Data Inputs:</strong> DMCC receives commands from PSAP applications to perform actions such as make/answer/release calls, hold/unhold, conference, transfer, and to start/stop media streams.</li>
+<li><strong>Control Signals:</strong> Uses CTI (Computer Telephony Integration) protocols over AES to control devices, manage call states, and handle media streams (RTP).</li>
+<li><strong>Operation:</strong>
+<ol>
+<li>PSAP application connects to AES server via DMCC API.</li>
+<li>Application requests control of a device (physical phone, softphone, virtual endpoint).</li>
+<li>Application can then monitor device status, control calls (answer, hold, transfer), and access media streams for recording or analysis.</li>
+<li>Media streams can be forked to recording servers or analytics tools.</li>
+</ol>
+</li>
+<li><strong>Outputs:</strong> Device status updates, call state events, media streams (RTP), and control acknowledgments sent back to the PSAP application.</li>
+</ul>
+</section>
+
+<section id="examples">
+<h2>Examples of DMCC Usage</h2>
+<ul>
+<li><strong>Call Control:</strong> Automatically answer an incoming 911 call on a call taker's softphone, place it on hold, or transfer it to another operator.</li>
+<li><strong>Media Recording:</strong> Fork the audio stream of a 911 call to a recording server for compliance and review.</li>
+<li><strong>Device Monitoring:</strong> Detect when a call taker's phone goes off-hook, is idle, or encounters an error, enabling better resource management.</li>
+</ul>
+</section>
+
+<section id="uml">
+<h2>DMCC in NG911 Call Handling</h2>
+<div class="diagram-container plantuml-diagram-container">
+<h3>Sequence of DMCC Interactions</h3>
+<img alt="DMCC Call Control Diagram Loading..." />
+<script type="text/plantuml" style="display: none;">
+@startuml
+skinparam defaultFontSize 40
+skinparam scale 0.75
+
+participant "PSAP App" as App
+participant "Avaya AES Server" as AES
+participant "Call Taker Device" as Device
+participant "NG911 Call Flow" as NG911
+
+App -> AES : Connect via DMCC API
+App -> AES : Request device control
+AES -> Device : Establish control
+NG911 -> Device : Deliver 911 Call
+Device -> AES : Call event (ringing)
+AES -> App : Notify incoming call
+App -> AES : Command: Answer Call
+AES -> Device : Answer Call
+Device -> NG911 : Call answered
+Device -> AES : Media stream (RTP)
+AES -> App : Media stream info
+App -> App : Record/Analyze Media
+
+@enduml
+</script>
+</div>
+</section>
+
+<section id="conclusion">
+<h2>Conclusion</h2>
+<p>DMCC enables PSAP applications to tightly integrate with telephony devices, providing advanced call control, media management, and device monitoring capabilities essential for efficient NG911 call handling.</p>
+</section>
+
+</main>
+
+<footer>
+<p>Diagrams rendered using PlantUML.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/plantuml-encoder@1.4.0/dist/plantuml-encoder.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
